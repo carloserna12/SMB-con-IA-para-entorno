@@ -1,7 +1,7 @@
 ﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 
 /* Spawn object if bumped by Player's head
  * Applicable to: Collectible brick and question blocks
@@ -63,8 +63,9 @@ public class CollectibleBlock : MonoBehaviour {
 						isActive = false;
 					}			
 				}
-
-				ArrayMov.playerLevelData.Add("Box");
+				Coordenadas coor = new Coordenadas("Box",Math.Round(transform.position.x),Math.Round(transform.position.y));
+				ArrayMov.playerLevelData.Add(coor);
+				//ArrayMov.playerLevelData.Add("Box");
 			}
 
 			time1 = Time.time;

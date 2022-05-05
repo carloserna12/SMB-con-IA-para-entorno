@@ -7091,13 +7091,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tile: {fileID: 11400000, guid: 271dc443a7d6c9d44a315900386eb81b, type: 2}
   tilemap: {fileID: 698703074}
-  prefab1: {fileID: 4479968757023396, guid: 8fb4ec26de4754c80995e0ad6aeb509c, type: 3}
-  prefab2: {fileID: 4626093930985990, guid: ed84cd197f7024048a728aa8354e0523, type: 3}
-  prefab3: {fileID: 4479968757023396, guid: 8fb4ec26de4754c80995e0ad6aeb509c, type: 3}
-  prefab4: {fileID: 4590855576346480, guid: 8a514c001af9d4ec58b498c8f908e948, type: 3}
+  suelo5x2: {fileID: 4291298829066670, guid: c2f9b816851684afbb145ae840defcfe, type: 3}
+  suelo2x2: {fileID: 4456080267742180, guid: 5486d6a5bc57649a7be0157e68963e01, type: 3}
+  bloqueCoin: {fileID: 4450853036713070, guid: c2cf0a6bc142746a6a26ad5011fc3399, type: 3}
+  bloqueBonif: {fileID: 4849239016231076, guid: 6c35459d6db0c41fa80075e6d00bf225,
+    type: 3}
+  bloqueVida: {fileID: 4465144387670898, guid: ee80148a6a6634492a197a751d0e2e2e, type: 3}
+  ladrilloComun: {fileID: 4697327612210776, guid: f095f80a7e318491f9980c56adfd0d23,
+    type: 3}
+  ladrilloCoin: {fileID: 4697663924526512, guid: fa68cc0283ca448a5afbdc9ab69ce657,
+    type: 3}
+  ladrilloStar: {fileID: 4530806348543322, guid: 30c73adcd51a64dacb5177d0fdd8849d,
+    type: 3}
+  enemyGoomba: {fileID: 4626093930985990, guid: ed84cd197f7024048a728aa8354e0523,
+    type: 3}
+  enemyKoopa: {fileID: 4822034138584250, guid: 02739983e8875481da95619ddc1b41e0, type: 3}
+  enemyKoopaFly: {fileID: 4425061036037622, guid: 8d77726d27e7f41d2969d5645704de86,
+    type: 3}
+  enemyGoombaGreen: {fileID: 4803240269307114, guid: 2296bbe1b552947e49916e817dd0ae3c,
+    type: 3}
+  greenPipe2x2: {fileID: 4215608783999672, guid: b96c82cf6024348128259a1909ed9b48,
+    type: 3}
+  greenPipe2x3: {fileID: 4668845314393790, guid: 821c25020ee504bbf809183620187f71,
+    type: 3}
+  greenPipe2x4: {fileID: 4928794608917510, guid: c50db9611ec0942cd913f415d36c68a6,
+    type: 3}
+  marble1x1: {fileID: 4229311929036726, guid: faf1694d50d8c4db58ace2859ba91cd7, type: 3}
+  marble1x2: {fileID: 4552706291331128, guid: 952c1fec13a5e4ebbafd0ca2087fed1e, type: 3}
+  marble1x3: {fileID: 4774008831361256, guid: 90945616a8def4ec98e8df9dda2a6f9f, type: 3}
+  marble1x4: {fileID: 4254752230061652, guid: 8fedeb9f5c0e94426bf598e1fa761694, type: 3}
+  marbleFinish: {fileID: 4090247165082764, guid: c84c914d3db3448ecb51dedbb98f989b,
+    type: 3}
+  fireBar: {fileID: 4083971541992084, guid: 6ab7adeca8ea944a18c2ad340290133f, type: 3}
+  coin: {fileID: 4590855576346480, guid: 8a514c001af9d4ec58b498c8f908e948, type: 3}
   mapWidth: 185
   mapHeight: 14
   updateData: 
+  pochoclo: 
 --- !u!4 &1418936335
 Transform:
   m_ObjectHideFlags: 0
@@ -8998,6 +9028,12 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 114690999990043446, guid: c2cf0a6bc142746a6a26ad5011fc3399,
+        type: 3}
+      propertyPath: objectToSpawn
+      value: 
+      objectReference: {fileID: 1946381533917960, guid: a675a4f50a6844b1489dc0a253aae2a6,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2cf0a6bc142746a6a26ad5011fc3399, type: 3}
 --- !u!4 &1826831314 stripped

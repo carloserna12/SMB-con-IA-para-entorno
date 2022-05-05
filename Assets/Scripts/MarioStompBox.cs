@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class MarioStompBox : MonoBehaviour {
 	private LevelManager t_LevelManager;
 	private GameStateManager arrayMov;
@@ -25,8 +25,10 @@ public class MarioStompBox : MonoBehaviour {
 			t_LevelManager.MarioStompEnemy (enemy);
 			Debug.Log (this.name + " OnTriggerEnter2D: finishes calling stomp method on " + other.gameObject.name);
 			////////////////
-			//arrayMov.playerLevelData.Add("Mario mato a " + other.gameObject.name);
-			arrayMov.playerLevelData.Add("Kill");
+
+			Coordenadas coor = new Coordenadas(other.gameObject.name,Math.Round(transform.position.x),Math.Round(transform.position.y));
+			arrayMov.playerLevelData.Add(coor);
+			//arrayMov.playerLevelData.Add("Kill");
 			
 		}
 	}

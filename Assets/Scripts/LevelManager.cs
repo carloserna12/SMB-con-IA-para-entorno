@@ -81,7 +81,7 @@ public class LevelManager : MonoBehaviour {
 	public bool musicPaused;
 
 	
-	public List<string> updateData = new List<string>();
+	//public List<Coordenadas> updateData = new List<Coordenadas>();
 	public string jsonSave;
 
 	void Awake() {

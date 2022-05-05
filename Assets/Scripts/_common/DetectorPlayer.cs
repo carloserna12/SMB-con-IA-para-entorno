@@ -24,8 +24,7 @@ public class DetectorPlayer : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag == "Player") {
 			
-            
-            arrayMov.playerLevelData.Add(gameObject.name);
+           //arrayMov.playerLevelData.Add(gameObject.name);
 
             
             if(gameObject.activeSelf){

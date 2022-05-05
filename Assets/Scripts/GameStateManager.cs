@@ -19,12 +19,12 @@ public class GameStateManager : MonoBehaviour {
 	public string sceneToLoad; // what scene to load after level start screen finishes?
 	public bool timeup;
 
-	public List<string> playerLevelData = new List<string>();
+	
 	public List<string> testApi = new List<string>();
 	///////////////////////////////
 	//Limitar fps a 100fps
 	
-
+	public List<Coordenadas> playerLevelData = new List<Coordenadas>();
 	void Awake () {
 		if (FindObjectsOfType (GetType ()).Length == 1) {
 			DontDestroyOnLoad (gameObject);

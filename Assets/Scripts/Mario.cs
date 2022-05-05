@@ -65,10 +65,14 @@ public class Mario : MonoBehaviour {
 	public bool inputFreezed;
 	
 
+	Coordenadas coor;
 	//public List<string> playerLevelData = new List<string>();
 
 
 	// Use this for initialization
+	//prueba//
+	
+
 	void Start () {
 
 		ArrayMov = FindObjectOfType<GameStateManager> ();
@@ -281,37 +285,55 @@ public class Mario : MonoBehaviour {
 		if (!inputFreezed) {
 			faceDirectionX = Input.GetAxisRaw ("Horizontal"); // > 0 for right, < 0 for left
 			if(faceDirectionX > 0){
-				ArrayMov.playerLevelData.Add("D"+ transform.position.x + "|" + transform.position.y);
+				coor = new Coordenadas("D",Math.Round(transform.position.x),Math.Round(transform.position.y));
+				ArrayMov.playerLevelData.Add(coor);
+				//ArrayMov.playerLevelData.Add("D"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y));
 			}else if(faceDirectionX < 0){
-				ArrayMov.playerLevelData.Add("I"+ transform.position.x + "|" + transform.position.y);
+				coor = new Coordenadas("I",Math.Round(transform.position.x),Math.Round(transform.position.y));
+				ArrayMov.playerLevelData.Add(coor);				
+				//ArrayMov.playerLevelData.Add("I"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y));
+			}else if(faceDirectionX == 0){
+				coor = new Coordenadas("N",Math.Round(transform.position.x),Math.Round(transform.position.y));
+				ArrayMov.playerLevelData.Add(coor);
+				//ArrayMov.playerLevelData.Add("N"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y));
 			}
 			
 
 			isDashing = Input.GetButton ("Dash");
 			if(isDashing){
-				ArrayMov.playerLevelData.Add("C"+ transform.position.x + "|" + transform.position.y);
+				
+				coor = new Coordenadas("C",Math.Round(transform.position.x),Math.Round(transform.position.y));
+				ArrayMov.playerLevelData.Add(coor);
+				//ArrayMov.playerLevelData.Add("C"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y));
 			}
 
 			isCrouching = Input.GetButton ("Crouch");
 			if(isCrouching){
-				ArrayMov.playerLevelData.Add("A"+ transform.position.x + "|" + transform.position.y);
+				coor = new Coordenadas("A",Math.Round(transform.position.x),Math.Round(transform.position.y));
+				ArrayMov.playerLevelData.Add(coor);
+				//ArrayMov.playerLevelData.Add("A"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y));
 			}
 
 			isShooting = Input.GetButtonDown ("Dash");
 			if(isShooting){
-				ArrayMov.playerLevelData.Add("F"+ transform.position.x + "|" + transform.position.y);
+				coor = new Coordenadas("F",Math.Round(transform.position.x),Math.Round(transform.position.y));
+				ArrayMov.playerLevelData.Add(coor);
+				//ArrayMov.playerLevelData.Add("F"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y));
 			}
 
 			jumpButtonHeld = Input.GetButton ("Jump");
 			if(jumpButtonHeld){
-				ArrayMov.playerLevelData.Add("S"+ transform.position.x + "|" + transform.position.y);
+				coor = new Coordenadas("S",Math.Round(transform.position.x),Math.Round(transform.position.y));
+				ArrayMov.playerLevelData.Add(coor);
+				//ArrayMov.playerLevelData.Add("S"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y));
 			}
 
 
 			if (Input.GetButtonUp ("Jump")) {
 				jumpButtonReleased = true;
-				
-				ArrayMov.playerLevelData.Add("J"+ transform.position.x + "|" + transform.position.y);
+				coor = new Coordenadas("J",Math.Round(transform.position.x),Math.Round(transform.position.y));
+				ArrayMov.playerLevelData.Add(coor);
+				//ArrayMov.playerLevelData.Add("J"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y)); 
 			
 			}
 		}
@@ -457,7 +479,10 @@ public class Mario : MonoBehaviour {
 					t_LevelManager.MarioPowerDown ();
 					//////
 					//ArrayMov.playerLevelData.Add("Muerte por " + other.gameObject.name);
-					ArrayMov.playerLevelData.Add("MDead");
+					
+					coor = new Coordenadas("DEAD",Math.Round(transform.position.x),Math.Round(transform.position.y));
+					ArrayMov.playerLevelData.Add(coor);
+					//ArrayMov.playerLevelData.Add("MDead"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y));
 					/////
 				}
 

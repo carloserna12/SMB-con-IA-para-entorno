@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class Coin : MonoBehaviour {
 	private LevelManager t_LevelManager;
 	private GameStateManager arrayMov;
+	
+	Coordenadas coor;
 
 	// Use this for initialization
 	void Start () {
@@ -18,7 +20,10 @@ public class Coin : MonoBehaviour {
 			t_LevelManager.AddCoin ();
 			Destroy (gameObject);
 			
-			arrayMov.playerLevelData.Add("RCoin");
+			coor = new Coordenadas("COIN",Math.Round(transform.position.x),Math.Round(transform.position.y));
+			
+			arrayMov.playerLevelData.Add(coor);
+			//arrayMov.playerLevelData.Add("RCoin"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y));
 			/*Debug.Log("ENTRO A LA MONEDA");
 			foreach (var dato in mario.playerLevelData)
 				{
