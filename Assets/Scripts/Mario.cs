@@ -480,7 +480,7 @@ public class Mario : MonoBehaviour {
 					//////
 					//ArrayMov.playerLevelData.Add("Muerte por " + other.gameObject.name);
 					
-					coor = new Coordenadas("DEAD",Math.Round(transform.position.x),Math.Round(transform.position.y));
+					coor = new Coordenadas("DEAD"+ other.gameObject.name,Math.Round(transform.position.x),Math.Round(transform.position.y));
 					ArrayMov.playerLevelData.Add(coor);
 					//ArrayMov.playerLevelData.Add("MDead"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y));
 					/////

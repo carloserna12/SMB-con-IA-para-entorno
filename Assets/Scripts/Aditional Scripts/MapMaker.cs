@@ -33,6 +33,8 @@ public class MapMaker : MonoBehaviour
     public Transform fireBar;
     public Transform coin;
 
+    public Transform hiddenLife;
+
     
 
     public int mapWidth;
@@ -46,9 +48,10 @@ public class MapMaker : MonoBehaviour
     public List<int> pochoclo = new List<int>();
 
     private GameStateManager t_GameStateManager;
-
+    
 
     private int[,] normalMarioWorld;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -112,7 +115,7 @@ public class MapMaker : MonoBehaviour
                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                                    { 1, 0, 0, 0, 0, 0, 23, 0, 0, 0, 0, 0, 0, 0},
                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                     { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -240,6 +243,9 @@ public class MapMaker : MonoBehaviour
                                     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
 
+        
+        
+
         t_GameStateManager = FindObjectOfType<GameStateManager> ();
         this.mapData = new int[this.mapWidth,this.mapHeight];
         prueb = 0;
@@ -289,8 +295,17 @@ public class MapMaker : MonoBehaviour
         }
         
         
-
-        this.GenerateTiles();
+        if (t_GameStateManager.modifMap == 0)
+        {
+            this.GenerateTiles(normalMarioWorld);
+            Debug.Log(t_GameStateManager.modifMap + "MODIFICADOR DO MAPA2");
+            
+        }else
+        {
+            GenerateTiles(t_GameStateManager.editMarioWorld);
+            Debug.Log(t_GameStateManager.modifMap+"MODIFICADOR DO MAPA");
+        }
+        
 
         string str = string.Join(",",updateData);
         Debug.Log(str);
@@ -333,7 +348,7 @@ public class MapMaker : MonoBehaviour
 
 
 
-    void GenerateTiles()
+    void GenerateTiles(int[,] matriz)
     {
         for (int i = 0; i < this.mapWidth; i++)
         {
@@ -362,81 +377,85 @@ public class MapMaker : MonoBehaviour
                 marbleFinish = 20
                 fireBar = 21
                 coin = 22
+                hiddenLife =23
                 */
 
 
 
 
-                if(this.normalMarioWorld[i,j] == 1)
+                if(matriz[i,j] == 1)
                 {
                    /* this.tilemap.SetTile(
                         new Vector3Int(i,j,0),
                         this.tile
                     );*/
                     Instantiate(suelo5x2, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==2)
+                }else if (matriz[i,j]==2)
                 {
                     Instantiate(suelo2x2, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==3)
+                }else if (matriz[i,j]==3)
                 {
                     Instantiate(bloqueCoin, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==4)
+                }else if (matriz[i,j]==4)
                 {
                     Instantiate(bloqueBonif, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==5)
+                }else if (matriz[i,j]==5)
                 {
                     Instantiate(bloqueVida, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==6)
+                }else if (matriz[i,j]==6)
                 {
                     Instantiate(ladrilloComun, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==7)
+                }else if (matriz[i,j]==7)
                 {
                     Instantiate(ladrilloCoin, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==8)
+                }else if (matriz[i,j]==8)
                 {
                     Instantiate(ladrilloStar, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==9)
+                }else if (matriz[i,j]==9)
                 {
                     Instantiate(enemyGoomba, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==10)
+                }else if (matriz[i,j]==10)
                 {
                     Instantiate(enemyKoopa, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==11)
+                }else if (matriz[i,j]==11)
                 {
                     Instantiate(enemyKoopaFly, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==12)
+                }else if (matriz[i,j]==12)
                 {
                     Instantiate(enemyGoombaGreen, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==13)
+                }else if (matriz[i,j]==13)
                 {
                     Instantiate(greenPipe2x2, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==14)
+                }else if (matriz[i,j]==14)
                 {
                     Instantiate(greenPipe2x3, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==15)
+                }else if (matriz[i,j]==15)
                 {
                     Instantiate(greenPipe2x4, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==16)
+                }else if (matriz[i,j]==16)
                 {
                     Instantiate(marble1x1, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==17)
+                }else if (matriz[i,j]==17)
                 {
                     Instantiate(marble1x2, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==18)
+                }else if (matriz[i,j]==18)
                 {
                     Instantiate(marble1x3, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==19)
+                }else if (matriz[i,j]==19)
                 {
                     Instantiate(marble1x4, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==20)
+                }else if (matriz[i,j]==20)
                 {
                     Instantiate(marbleFinish, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==21)
+                }else if (matriz[i,j]==21)
                 {
                     Instantiate(fireBar, new Vector3(i, j, 0), Quaternion.identity);
-                }else if (this.normalMarioWorld[i,j]==22)
+                }else if (matriz[i,j]==22)
                 {
                     Instantiate(coin, new Vector3(i, j, 0), Quaternion.identity);
+                }else if (matriz[i,j]==23)
+                {
+                    Instantiate(hiddenLife, new Vector3(i, j, 0), Quaternion.identity);
                 }
             }
         }

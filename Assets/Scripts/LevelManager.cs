@@ -80,8 +80,8 @@ public class LevelManager : MonoBehaviour {
 	public bool timerPaused;
 	public bool musicPaused;
 
+	Coordenadas coor;
 	
-	//public List<Coordenadas> updateData = new List<Coordenadas>();
 	public string jsonSave;
 
 	void Awake() {
@@ -146,6 +146,8 @@ public class LevelManager : MonoBehaviour {
 		}
 
 		if (timeLeftInt <= 0) {
+			coor = new Coordenadas("TIMEOUT",Math.Round(transform.position.x),Math.Round(transform.position.y));
+			t_GameStateManager.playerLevelData.Add(coor);
 			MarioRespawn (true);
 		}
 

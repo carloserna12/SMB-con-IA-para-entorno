@@ -10,12 +10,14 @@ public class Castle : MonoBehaviour {
 
 	private float flagVelocityY = 0.025f;
 	public string sceneName;
-
+	public GameStateManager t_GameStateManager;
 	// Use this for initialization
 	void Start () {
+		t_GameStateManager = FindObjectOfType<GameStateManager>();
 		t_LevelManager = FindObjectOfType<LevelManager> ();
 		flag = transform.Find ("Flag");
 		flagStop = transform.Find ("Flag Stop");
+		
 	}
 
 	void FixedUpdate() {
@@ -23,6 +25,7 @@ public class Castle : MonoBehaviour {
 			if (flag.position.y < flagStop.position.y) {
 				flag.position = new Vector2 (flag.position.x, flag.position.y + flagVelocityY);
 			} else {
+        		
 				t_LevelManager.LoadNewLevel (sceneName, t_LevelManager.levelCompleteMusic.length);
 			}
 		}
@@ -31,7 +34,9 @@ public class Castle : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D other) {
 		if (other.gameObject.tag == "Player") {
 			moveFlag = true;
+			t_GameStateManager.modifMap = 1; 
 			t_LevelManager.MarioCompleteLevel ();
+			
 		}
 	}
 }

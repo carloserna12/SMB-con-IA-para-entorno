@@ -15,7 +15,7 @@ public class Coordenadas {
         mov = mv;
         cooX = cX;
         cooy = cY;
-        Debug.Log("entro esta wea");
+        
     }
     
     

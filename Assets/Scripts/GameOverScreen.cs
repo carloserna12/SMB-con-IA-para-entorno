@@ -40,6 +40,7 @@ public class GameOverScreen : MonoBehaviour {
 		LoadMainMenu (gameOverMusicSource.clip.length);
 
 		Debug.Log (this.name + " Start: current scene is " + SceneManager.GetActiveScene ().name);
+		
 	}
 
 	IEnumerator LoadSceneDelayCo(string sceneName, float delay = 0) {
@@ -60,6 +61,7 @@ public class GameOverScreen : MonoBehaviour {
 	}
 
 	void LoadMainMenu(float delay = 0) {
+		t_GameStateManager.modifMap = 0;
 		StartCoroutine (LoadSceneDelayCo ("Main Menu", delay));
 	}
 }
