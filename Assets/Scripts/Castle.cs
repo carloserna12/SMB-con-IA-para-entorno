@@ -34,7 +34,7 @@ public class Castle : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D other) {
 		if (other.gameObject.tag == "Player") {
 			moveFlag = true;
-			t_GameStateManager.modifMap = 1; 
+			t_GameStateManager.modifMap = 2; 
 			t_LevelManager.MarioCompleteLevel ();
 			
 		}

@@ -26,7 +26,7 @@ public class LevelManager : MonoBehaviour {
 	public bool isInvincibleStarman;
 	private float MarioInvinciblePowerdownDuration = 2;
 	private float MarioInvincibleStarmanDuration = 12;
-	private float transformDuration = 1;
+	private float transformDuration = 0.5f;
 
 	private GameStateManager t_GameStateManager;
 	private Mario mario;
@@ -272,6 +272,9 @@ public class LevelManager : MonoBehaviour {
 		Time.timeScale = 0f;
 		mario_Animator.updateMode = AnimatorUpdateMode.UnscaledTime;
 
+		Coordenadas coor = new Coordenadas("marioPowerUp",Math.Round(transform.position.x),Math.Round(transform.position.y));
+		t_GameStateManager.playerLevelData.Add(coor);	
+		
 		yield return new WaitForSecondsRealtime (transformDuration);
 		yield return new WaitWhile(() => gamePaused);
 
@@ -422,7 +425,7 @@ public class LevelManager : MonoBehaviour {
 		File.WriteAllText(path,jsonSave);
 		Debug.Log(path);*/
 //////////////////
-		StartCoroutine(ApiRequest.startApi());
+		//StartCoroutine(ApiRequest.startApi());
 		//ApiRequest.startApi();
 
 	}

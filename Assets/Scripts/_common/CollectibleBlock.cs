@@ -50,9 +50,11 @@ public class CollectibleBlock : MonoBehaviour {
 				if (timesToSpawn > 0) {
 					if (isPowerupBlock) { // spawn mushroom or fireflower depending on Mario's size
 						if (t_LevelManager.marioSize == 0) {
-							objectToSpawn = bigMushroom;		
+							objectToSpawn = bigMushroom;
+								
 						} else {
-							objectToSpawn = fireFlower;		
+							objectToSpawn = fireFlower;	
+							
 						}
 					}
 					Instantiate (objectToSpawn, transform.position + spawnPositionOffset, Quaternion.identity);
@@ -61,10 +63,11 @@ public class CollectibleBlock : MonoBehaviour {
 					if (timesToSpawn == 0) {
 						m_Animator.SetTrigger ("deactivated");
 						isActive = false;
+						
 					}			
 				}
-				Coordenadas coor = new Coordenadas("Box",Math.Round(transform.position.x),Math.Round(transform.position.y));
-				ArrayMov.playerLevelData.Add(coor);
+				//Coordenadas coor = new Coordenadas("Box " + objectToSpawn,Math.Round(transform.position.x),Math.Round(transform.position.y));
+				//ArrayMov.playerLevelData.Add(coor);	
 				//ArrayMov.playerLevelData.Add("Box");
 			}
 

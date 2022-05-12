@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 
 public class LevelStartScreen : MonoBehaviour {
-	private GameStateManager t_GameStateManager;
+	public GameStateManager t_GameStateManager;
 	private float loadScreenDelay = 2;
 
 	public Text WorldTextHUD;
@@ -41,53 +41,8 @@ public class LevelStartScreen : MonoBehaviour {
 		////////////////
 		////testeos////
 		//////////////
-	//	Debug.Log((t_GameStateManager.playerLevelData).Count);
-
 		//Limpia la matriz de datos del jugador
-		for (int i = 0; i < (t_GameStateManager.playerLevelData).Count; i++)
-		{
-			if (i <= ((t_GameStateManager.playerLevelData).Count)-5)
-			{
-				if (t_GameStateManager.playerLevelData[i].mov == t_GameStateManager.playerLevelData[i+1].mov &&
-					t_GameStateManager.playerLevelData[i].cooX == t_GameStateManager.playerLevelData[i+1].cooX &&
-					t_GameStateManager.playerLevelData[i].cooy == t_GameStateManager.playerLevelData[i+1].cooy)
-				{
-					t_GameStateManager.playerLevelData.RemoveAt(i+1);
-				//	Debug.Log("removio 1");
-					
-
-				}else if (	t_GameStateManager.playerLevelData[i].mov   == t_GameStateManager.playerLevelData[i+2].mov &&
-							t_GameStateManager.playerLevelData[i+1].mov == t_GameStateManager.playerLevelData[i+3].mov &&
-							t_GameStateManager.playerLevelData[i].cooX   == t_GameStateManager.playerLevelData[i+2].cooX &&
-							t_GameStateManager.playerLevelData[i+1].cooX == t_GameStateManager.playerLevelData[i+3].cooX &&
-							t_GameStateManager.playerLevelData[i].cooy   == t_GameStateManager.playerLevelData[i+2].cooy &&
-							t_GameStateManager.playerLevelData[i+1].cooy == t_GameStateManager.playerLevelData[i+3].cooy)
-				{
-					t_GameStateManager.playerLevelData.RemoveAt(i+2);
-					t_GameStateManager.playerLevelData.RemoveAt(i+3);
-				//	Debug.Log("removio 2");
-
-					
-
-				}else if (	t_GameStateManager.playerLevelData[i].mov   == t_GameStateManager.playerLevelData[i+3].mov &&
-							t_GameStateManager.playerLevelData[i+1].mov == t_GameStateManager.playerLevelData[i+4].mov &&
-							t_GameStateManager.playerLevelData[i+2].mov == t_GameStateManager.playerLevelData[i+5].mov &&
-							t_GameStateManager.playerLevelData[i].cooX   == t_GameStateManager.playerLevelData[i+3].cooX &&
-							t_GameStateManager.playerLevelData[i+1].cooX == t_GameStateManager.playerLevelData[i+4].cooX &&
-							t_GameStateManager.playerLevelData[i+2].cooX == t_GameStateManager.playerLevelData[i+5].cooX &&
-							t_GameStateManager.playerLevelData[i].cooy   == t_GameStateManager.playerLevelData[i+3].cooy &&
-							t_GameStateManager.playerLevelData[i+1].cooy == t_GameStateManager.playerLevelData[i+4].cooy &&
-							t_GameStateManager.playerLevelData[i+2].cooy == t_GameStateManager.playerLevelData[i+5].cooy)				{
-					t_GameStateManager.playerLevelData.RemoveAt(i+3);
-					t_GameStateManager.playerLevelData.RemoveAt(i+4);
-					t_GameStateManager.playerLevelData.RemoveAt(i+5);
-
-				//	Debug.Log("removio 3");
-				}
-				
-			}
-		}
-		
+		limpiarMatriz(t_GameStateManager.playerLevelData);
 		///FUNCIONES DE AYUDA////
 
 		                     //Activador del facilitador//
@@ -98,95 +53,48 @@ public class LevelStartScreen : MonoBehaviour {
 			int timeOut = t_GameStateManager.playerLevelData.Where(x=> x.mov == "TIMEOUT").Count();
 			
 			//Facilitador por caida
-			if (cantidadMuerteCaida >= 2 && cantidadMuerteGoomba<2)
+			if (cantidadMuerteCaida >= 2 && cantidadMuerteGoomba<=1)
 			{
-				for (int i = 0; i < cantidadMuerteCaida; i++)
-				{
-					int indice = t_GameStateManager.playerLevelData.FindIndex(x => x.mov == "OUT");
-					double elemx = t_GameStateManager.playerLevelData[indice-1].cooX;
-					double elemy = t_GameStateManager.playerLevelData[indice-1].cooy;
-					t_GameStateManager.editMarioWorld[Convert.ToInt32(elemx),Convert.ToInt32(elemy)] = 2;
-					t_GameStateManager.playerLevelData[indice].mov ="IN";	
-				}
+				facilitadorPorCaida(cantidadMuerteCaida);
 				//General:[Bloque bonificacion]
-				t_GameStateManager.editMarioWorld[0,5] = 4;
-				t_GameStateManager.modifMap = 1;
-
+				bloqueBonificacion();
 				//General:[Mostrar Vidas Ocultas]
-				for (int i = 0; i < 185; i++)
-        		{
-					for (int j = 0; j < 14; j++)
-					{
-						if(t_GameStateManager.editMarioWorld[i,j] == 23)
-						{
-							t_GameStateManager.editMarioWorld[i,j]= 5;
-						}
-					}
-				}
+				mostrarVidasOcultas();
 			}
 			//Facilitador de muerte por enemigo
-			else if (cantidadMuerteGoomba>=2 && cantidadMuerteCaida<2)
+			else if (cantidadMuerteGoomba>=1 && cantidadMuerteCaida<=1)
 			{
-				int aux = 1;
-				for (int i = 0; i < 185; i++)
-        		{
-					for (int j = 0; j < 14; j++)
-					{
-						if(t_GameStateManager.editMarioWorld[i,j] == 12)
-						{
-							if (aux == 1)
-							{
-								t_GameStateManager.editMarioWorld[i,j] = 0;
-								Debug.Log(t_GameStateManager.editMarioWorld[i,j] + "CAMBIE MATRIZ");
-								aux = 0;
-							}else
-							{
-								aux = 1;
-							}
-							
-						}
-					}
-				}
+				facilitadorPorEnemigo();
 				//General:[Bloque bonificacion]
-				t_GameStateManager.editMarioWorld[0,5] = 4;
-				t_GameStateManager.modifMap = 1;
-
+				bloqueBonificacion();
 				//General:[Mostrar Vidas Ocultas]
-				for (int i = 0; i < 185; i++)
-        		{
-					for (int j = 0; j < 14; j++)
-					{
-						if(t_GameStateManager.editMarioWorld[i,j] == 23)
-						{
-							t_GameStateManager.editMarioWorld[i,j]= 5;
-						}
-					}
-				}
+				mostrarVidasOcultas();
 			}
 			//Facilitador de muerte por falta de tiempo
 			else if (timeOut >= 0)
 			{
-				t_GameStateManager.timeLeft = 600.5f;
-				t_GameStateManager.modifMap = 1;
+				facilitadorPorTiempo();
 				//General:[Bloque bonificacion]
-				t_GameStateManager.editMarioWorld[0,5] = 4;
-
+				bloqueBonificacion();
 				//General:[Mostrar Vidas Ocultas]
-				for (int i = 0; i < 185; i++)
-        		{
-					for (int j = 0; j < 14; j++)
-					{
-						if(t_GameStateManager.editMarioWorld[i,j] == 23)
-						{
-							t_GameStateManager.editMarioWorld[i,j]= 5;
-						}
-					}
-				}
+				mostrarVidasOcultas();
+			}
+			//Facilitador por inconcistencia
+			else
+			{
+				facilitadorPorTiempo();
+				facilitadorPorEnemigo();
+				facilitadorPorCaida(cantidadMuerteCaida);
+				//General:[Bloque bonificacion]
+				bloqueBonificacion();
+				//General:[Mostrar Vidas Ocultas]
+				mostrarVidasOcultas();
 			}		
 
-		}else if (t_GameStateManager.modifMap == 1)
+		}else if (t_GameStateManager.modifMap == 2)
 		{
-			Debug.Log("Genial mijo");
+			safeZoneDestroyer(t_GameStateManager.playerLevelData);
+
 		}
 		
 		
@@ -205,6 +113,178 @@ public class LevelStartScreen : MonoBehaviour {
 	IEnumerator LoadSceneDelayCo(string sceneName, float delay) {
 		yield return new WaitForSecondsRealtime (delay);
 		SceneManager.LoadScene (sceneName);
+		
+	}
+
+	void limpiarMatriz(List<Coordenadas> listaDatosJugador){
+        for (int i = 0; i < (listaDatosJugador).Count; i++)
+		{
+			if (i <= ((listaDatosJugador).Count)-5)
+			{
+				if (listaDatosJugador[i].mov == listaDatosJugador[i+1].mov &&
+					listaDatosJugador[i].cooX == listaDatosJugador[i+1].cooX &&
+					listaDatosJugador[i].cooy == listaDatosJugador[i+1].cooy)
+				{
+					listaDatosJugador.RemoveAt(i+1);
+					//Debug.Log("removio 1");
+					
+
+				}else if (	listaDatosJugador[i].mov   == listaDatosJugador[i+2].mov &&
+							listaDatosJugador[i+1].mov == listaDatosJugador[i+3].mov &&
+							listaDatosJugador[i].cooX   == listaDatosJugador[i+2].cooX &&
+							listaDatosJugador[i+1].cooX == listaDatosJugador[i+3].cooX &&
+							listaDatosJugador[i].cooy   == listaDatosJugador[i+2].cooy &&
+							listaDatosJugador[i+1].cooy == listaDatosJugador[i+3].cooy)
+				{
+					listaDatosJugador.RemoveAt(i+2);
+					listaDatosJugador.RemoveAt(i+3);
+					//Debug.Log("removio 2");
+
+					
+
+				}else if (	listaDatosJugador[i].mov   == listaDatosJugador[i+3].mov &&
+							listaDatosJugador[i+1].mov == listaDatosJugador[i+4].mov &&
+							listaDatosJugador[i+2].mov == listaDatosJugador[i+5].mov &&
+							listaDatosJugador[i].cooX   == listaDatosJugador[i+3].cooX &&
+							listaDatosJugador[i+1].cooX == listaDatosJugador[i+4].cooX &&
+							listaDatosJugador[i+2].cooX == listaDatosJugador[i+5].cooX &&
+							listaDatosJugador[i].cooy   == listaDatosJugador[i+3].cooy &&
+							listaDatosJugador[i+1].cooy == listaDatosJugador[i+4].cooy &&
+							listaDatosJugador[i+2].cooy == listaDatosJugador[i+5].cooy)				{
+					listaDatosJugador.RemoveAt(i+3);
+					listaDatosJugador.RemoveAt(i+4);
+					listaDatosJugador.RemoveAt(i+5);
+
+					//Debug.Log("removio 3");
+					
+				}
+				
+			}
+		}
+    }
+
+
+//Funciones facilitadoras
+	void mostrarVidasOcultas(){
+		for (int i = 0; i < 185; i++)
+		{
+			for (int j = 0; j < 14; j++)
+			{
+				if(t_GameStateManager.editMarioWorld[i,j] == 23)
+				{
+					t_GameStateManager.editMarioWorld[i,j]= 5;
+				}
+			}
+		}
+	}
+
+	void bloqueBonificacion(){
+		t_GameStateManager.editMarioWorld[0,5] = 4;
+		t_GameStateManager.modifMap = 1;
+	}
+
+	void facilitadorPorCaida(int cantidadMuerteCaida){
+		for (int i = 0; i < cantidadMuerteCaida; i++)
+		{
+			int indice = t_GameStateManager.playerLevelData.FindIndex(x => x.mov == "OUT");
+			double elemx = t_GameStateManager.playerLevelData[indice-1].cooX;
+			double elemy = t_GameStateManager.playerLevelData[indice-1].cooy;
+			t_GameStateManager.editMarioWorld[Convert.ToInt32(elemx),Convert.ToInt32(elemy)] = 2;
+			t_GameStateManager.playerLevelData[indice].mov ="IN";	
+		}
+	}
+
+	void facilitadorPorEnemigo(){
+		int aux = 1;
+		for (int i = 0; i < 185; i++)
+		{
+			for (int j = 0; j < 14; j++)
+			{
+				if(t_GameStateManager.editMarioWorld[i,j] == 12)
+				{
+					if (aux == 1)
+					{
+						t_GameStateManager.editMarioWorld[i,j] = 0;
+						aux = 0;
+					}
+					else
+					{
+						aux = 1;
+					}
+					
+				}
+			}
+		}
+	}
+
+	void facilitadorPorTiempo(){
+		t_GameStateManager.timeLeft = 600.5f;
+		t_GameStateManager.modifMap = 1;
+	}
+
+//Funciones dificultadoras
+	void safeZoneDestroyer(List<Coordenadas> listaDatosJugador){
+		double[,] posicion = new double[5,2]{{0,0},
+										{0,0},
+										{0,0},
+										{0,0},
+										{0,0}};
+		double fx = 0;
+		double fy =0;
+		int cont = 0;
+		
+		int contp1 = 0;
+		int contp2 = 0;
+		int cantidadBonusEnMapa = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "marioPowerUp").Count());
+		Debug.Log(cantidadBonusEnMapa + " Cantidad  bonus en el mapa recogidos");
+		for (int i = 0; i < ((listaDatosJugador).Count)-1; i++)
+		{
+
+
+			///////////////////////////////////////////////////////////
+			if (contp1 <5)
+			{
+				if (listaDatosJugador[i].cooX==listaDatosJugador[i+1].cooX)
+				//if (listaDatosJugador[i].cooX==listaDatosJugador[i+1].cooX&&listaDatosJugador[i].cooy==listaDatosJugador[i+1].cooy)
+				{
+					cont++;
+					Debug.Log("numero"+ listaDatosJugador[i].cooX);
+				}
+				else if(cont >=100)
+				{
+					Debug.Log("contador cuando pasa 100: "+ cont);
+					fx = listaDatosJugador[i-1].cooX;
+					fy = listaDatosJugador[i-1].cooy;
+					posicion[contp1,contp2] = fx;
+					posicion[contp1,contp2+1] = fy;
+					Debug.Log("fx guardado: "+ fx);
+					Debug.Log("fy guardado: "+ fy);
+					contp1++;
+					fx = listaDatosJugador[i].cooX;
+					fy = listaDatosJugador[i].cooy;	
+					cont = 0;
+				}else
+				{
+					cont = 0;
+				}		
+			}	
+		}
+
+
+
+		for (int i = 0; i < 5; i++)
+		{
+			int j = 0;
+			double elemx = posicion[i,j];
+			double elemy = posicion[i,j+1];
+			if (elemx != 0)
+			{
+				t_GameStateManager.editMarioWorld[Convert.ToInt32(elemx),Convert.ToInt32(elemy)] = 21;
+			}
+			
+		}
+		
+		
 		
 	}
 }
