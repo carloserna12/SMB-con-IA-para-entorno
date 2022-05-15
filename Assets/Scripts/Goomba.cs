@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Goomba : Enemy {
 	private Animator m_Animator;
 	private float stompedDuration = 0.5f;
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +21,8 @@ public class Goomba : Enemy {
 	}
 
 	public override void StompedByMario() {
+		
+
 		isBeingStomped = true;
 		StopInteraction ();
 		Debug.Log (this.name + " StompedByMario: stopped interaction");

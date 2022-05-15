@@ -488,6 +488,7 @@ public class Mario : MonoBehaviour {
 
 			} else if (t_LevelManager.isInvincibleStarman) {
 				t_LevelManager.MarioStarmanTouchEnemy (enemy);
+				
 			}
 		
 		} else if (other.gameObject.tag == "Goal" && isClimbingFlagPole && bottomHit) {

@@ -17,8 +17,11 @@ public class MoveAndFlip : MonoBehaviour {
 	private Rigidbody2D m_Rigidbody2D;
 	private GameObject mario;
 
+	public GameStateManager t_GameStateManager;
+
 	// Use this for initialization
 	void Start () {
+		t_GameStateManager = FindObjectOfType<GameStateManager> ();
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
 		mario = FindObjectOfType<Mario> ().gameObject;
 		OrientSprite ();
@@ -49,7 +52,15 @@ public class MoveAndFlip : MonoBehaviour {
 ///////Speed.x controla la velocidad de movimiento
 	void FixedUpdate () {
 		if (canMove) {
-			m_Rigidbody2D.velocity = new Vector2(Speed.x * directionX, m_Rigidbody2D.velocity.y);
+			if (t_GameStateManager.modifMap == 2)
+			{
+				m_Rigidbody2D.velocity = new Vector2(t_GameStateManager.controlVelocidad * directionX, m_Rigidbody2D.velocity.y);
+			}else
+			{
+				m_Rigidbody2D.velocity = new Vector2(Speed.x * directionX, m_Rigidbody2D.velocity.y);
+				Debug.Log(m_Rigidbody2D.velocity.y + "VELOCIDADTROLLFACE");
+			}
+			
 		}
 	}
 

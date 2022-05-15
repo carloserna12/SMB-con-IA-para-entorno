@@ -265,6 +265,8 @@ public class LevelManager : MonoBehaviour {
 			StartCoroutine (MarioPowerUpCo ());
 		}
 		AddScore (powerupBonus, mario.transform.position);
+		Coordenadas coor = new Coordenadas("marioPowerUp",Math.Round(transform.position.x),Math.Round(transform.position.y));
+		t_GameStateManager.playerLevelData.Add(coor);
 	}
 
 	IEnumerator MarioPowerUpCo() {
@@ -358,6 +360,8 @@ public class LevelManager : MonoBehaviour {
 		soundSource.PlayOneShot (stompSound);
 		AddScore (enemy.stompBonus, enemy.gameObject.transform.position);
 		Debug.Log (this.name + " MarioStompEnemy called on " + enemy.gameObject.name);
+		Coordenadas coor = new Coordenadas("enemyDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
+		t_GameStateManager.playerLevelData.Add(coor);	
 	}
 
 	public void MarioStarmanTouchEnemy(Enemy enemy) {
@@ -365,6 +369,8 @@ public class LevelManager : MonoBehaviour {
 		soundSource.PlayOneShot (kickSound);
 		AddScore (enemy.starmanBonus, enemy.gameObject.transform.position);
 		Debug.Log (this.name + " MarioStarmanTouchEnemy called on " + enemy.gameObject.name);
+		Coordenadas coor = new Coordenadas("enemyDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
+		t_GameStateManager.playerLevelData.Add(coor);
 	}
 
 	public void RollingShellTouchEnemy(Enemy enemy) {
@@ -372,12 +378,16 @@ public class LevelManager : MonoBehaviour {
 		soundSource.PlayOneShot (kickSound);
 		AddScore (enemy.rollingShellBonus, enemy.gameObject.transform.position);
 		Debug.Log (this.name + " RollingShellTouchEnemy called on " + enemy.gameObject.name);
+		Coordenadas coor = new Coordenadas("enemyDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
+		t_GameStateManager.playerLevelData.Add(coor);
 	}
 
 	public void BlockHitEnemy(Enemy enemy) {
 		enemy.HitBelowByBlock ();
 		AddScore (enemy.hitByBlockBonus, enemy.gameObject.transform.position);
 		Debug.Log (this.name + " BlockHitEnemy called on " + enemy.gameObject.name);
+		Coordenadas coor = new Coordenadas("enemyDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
+		t_GameStateManager.playerLevelData.Add(coor);
 	}
 
 	public void FireballTouchEnemy(Enemy enemy) {
@@ -385,6 +395,8 @@ public class LevelManager : MonoBehaviour {
 		soundSource.PlayOneShot (kickSound);
 		AddScore (enemy.fireballBonus, enemy.gameObject.transform.position);
 		Debug.Log (this.name + " FireballTouchEnemy called on " + enemy.gameObject.name);
+		Coordenadas coor = new Coordenadas("enemyDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
+		t_GameStateManager.playerLevelData.Add(coor);
 	}
 
 	/****************** Scene loading */

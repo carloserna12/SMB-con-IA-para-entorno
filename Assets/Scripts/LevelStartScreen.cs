@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System;
 using System.IO;
 using System.Linq;
+using Random = System.Random;
 
 public class LevelStartScreen : MonoBehaviour {
 	public GameStateManager t_GameStateManager;
@@ -19,6 +20,7 @@ public class LevelStartScreen : MonoBehaviour {
 	public Text livesText;
 	public List<string> updateData = new List<string>();
 	public string jsonSave;
+	
 	//public MapMaker maper;
 	// Use this for initialization
 	void Start () {
@@ -43,14 +45,13 @@ public class LevelStartScreen : MonoBehaviour {
 		//////////////
 		//Limpia la matriz de datos del jugador
 		limpiarMatriz(t_GameStateManager.playerLevelData);
-		///FUNCIONES DE AYUDA////
 
-		                     //Activador del facilitador//
-		if ((t_GameStateManager.modifMap == 0 && t_GameStateManager.lives == 1))
+		///FUNCIONES DE AYUDA////       
+		if ((t_GameStateManager.modifMap == 0 && t_GameStateManager.lives == 1))//Activador del facilitador
 		{
-			int cantidadMuerteCaida = t_GameStateManager.playerLevelData.Where(x=> x.mov == "OUT").Count();
-			int cantidadMuerteGoomba = t_GameStateManager.playerLevelData.Where(x=> x.mov == "DEADGreen Goomba(Clone)").Count();
-			int timeOut = t_GameStateManager.playerLevelData.Where(x=> x.mov == "TIMEOUT").Count();
+			int cantidadMuerteCaida = t_GameStateManager.playerLevelData.Where(x=> x.mov == "OUT").Count();//Variable busca y guarda # de veces que jugador muere por caida
+			int cantidadMuerteGoomba = t_GameStateManager.playerLevelData.Where(x=> x.mov == "DEADGreen Goomba(Clone)").Count();//Variable busca y guarda # de veces que jugador muere por Goomba
+			int timeOut = t_GameStateManager.playerLevelData.Where(x=> x.mov == "TIMEOUT").Count();//Variable busca y guarda si jugador muere por tiempo
 			
 			//Facilitador por caida
 			if (cantidadMuerteCaida >= 2 && cantidadMuerteGoomba<=1)
@@ -91,10 +92,30 @@ public class LevelStartScreen : MonoBehaviour {
 				mostrarVidasOcultas();
 			}		
 
-		}else if (t_GameStateManager.modifMap == 2)
+		}
+		//FUNCIONES DIFICULTADORES
+		else if (t_GameStateManager.modifMap == 2)//Activador de dificultadores
 		{
-			safeZoneDestroyer(t_GameStateManager.playerLevelData);
+			int cantidadBonusRecolectados = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "marioPowerUp").Count());//variable que cuenta la cantidad de bonificadores que el jugador uso
+			int cantidadEnemigosMatados = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "enemyDead").Count());
+			int cantidadBonusEnMapa = buscarElementos(4);
+			int cantidadMonedasEnMapa = buscarElementos(3);
+			int cantidadGoombasMapa = buscarElementos(9);
+			int cantidadKoopasMapa = buscarElementos(10);
+			int cantidadKoopasVoladoresMapa = buscarElementos(11);
+			int cantidadEnemigosTotal = cantidadGoombasMapa + cantidadKoopasMapa + cantidadKoopasVoladoresMapa;
 
+			limpiadorPorIteracion("marioPowerUp","marioPowerUpDone");
+			//limpiadorPorIteracion("enemyDead","enemyDeadDone");
+
+			if (cantidadBonusRecolectados == cantidadBonusEnMapa)
+			{
+				Debug.Log("Entro en aleatorizar");
+				aleatorizarBonusMap(cantidadBonusEnMapa,cantidadMonedasEnMapa);
+			}
+			safeZoneDestroyer(t_GameStateManager.playerLevelData);//Llama la funcion safeZoneDestroyer
+			
+			rageEnemy();
 		}
 		
 		
@@ -116,12 +137,12 @@ public class LevelStartScreen : MonoBehaviour {
 		
 	}
 
-	void limpiarMatriz(List<Coordenadas> listaDatosJugador){
-        for (int i = 0; i < (listaDatosJugador).Count; i++)
+	void limpiarMatriz(List<Coordenadas> listaDatosJugador){//Funcion que limpia la lista de informacion
+        for (int i = 0; i < (listaDatosJugador).Count; i++)//Recorre la lista
 		{
-			if (i <= ((listaDatosJugador).Count)-5)
+			if (i <= ((listaDatosJugador).Count)-5)//Resta 5 para evitar desbordamiento "arreglar"
 			{
-				if (listaDatosJugador[i].mov == listaDatosJugador[i+1].mov &&
+				if (listaDatosJugador[i].mov == listaDatosJugador[i+1].mov &&//Elimina similitudes de 1 vs 1
 					listaDatosJugador[i].cooX == listaDatosJugador[i+1].cooX &&
 					listaDatosJugador[i].cooy == listaDatosJugador[i+1].cooy)
 				{
@@ -129,7 +150,7 @@ public class LevelStartScreen : MonoBehaviour {
 					//Debug.Log("removio 1");
 					
 
-				}else if (	listaDatosJugador[i].mov   == listaDatosJugador[i+2].mov &&
+				}else if (	listaDatosJugador[i].mov   == listaDatosJugador[i+2].mov &&//Elimina similitudes de 2 vs 2
 							listaDatosJugador[i+1].mov == listaDatosJugador[i+3].mov &&
 							listaDatosJugador[i].cooX   == listaDatosJugador[i+2].cooX &&
 							listaDatosJugador[i+1].cooX == listaDatosJugador[i+3].cooX &&
@@ -142,7 +163,7 @@ public class LevelStartScreen : MonoBehaviour {
 
 					
 
-				}else if (	listaDatosJugador[i].mov   == listaDatosJugador[i+3].mov &&
+				}else if (	listaDatosJugador[i].mov   == listaDatosJugador[i+3].mov &&//Elimina similitudes de 3 vs 3
 							listaDatosJugador[i+1].mov == listaDatosJugador[i+4].mov &&
 							listaDatosJugador[i+2].mov == listaDatosJugador[i+5].mov &&
 							listaDatosJugador[i].cooX   == listaDatosJugador[i+3].cooX &&
@@ -157,6 +178,9 @@ public class LevelStartScreen : MonoBehaviour {
 
 					//Debug.Log("removio 3");
 					
+				}else
+				{
+					Debug.Log("No se pudo limpiar mas");
 				}
 				
 			}
@@ -165,7 +189,7 @@ public class LevelStartScreen : MonoBehaviour {
 
 
 //Funciones facilitadoras
-	void mostrarVidasOcultas(){
+	void mostrarVidasOcultas(){ //Funcion que recorre el mundo y cambia vidas ocultas por vidas visibles
 		for (int i = 0; i < 185; i++)
 		{
 			for (int j = 0; j < 14; j++)
@@ -178,12 +202,12 @@ public class LevelStartScreen : MonoBehaviour {
 		}
 	}
 
-	void bloqueBonificacion(){
+	void bloqueBonificacion(){//Funcion que crea un bloque de bonificacion de tamaño arriba de spawn de Mario
 		t_GameStateManager.editMarioWorld[0,5] = 4;
 		t_GameStateManager.modifMap = 1;
 	}
 
-	void facilitadorPorCaida(int cantidadMuerteCaida){
+	void facilitadorPorCaida(int cantidadMuerteCaida){//Funcion que crea un bloque 1x2 suelo en las posiciones donde el jugador murio por caida
 		for (int i = 0; i < cantidadMuerteCaida; i++)
 		{
 			int indice = t_GameStateManager.playerLevelData.FindIndex(x => x.mov == "OUT");
@@ -194,7 +218,7 @@ public class LevelStartScreen : MonoBehaviour {
 		}
 	}
 
-	void facilitadorPorEnemigo(){
+	void facilitadorPorEnemigo(){//Funcion que reduce a la mitad la cantidad de enemigos
 		int aux = 1;
 		for (int i = 0; i < 185; i++)
 		{
@@ -217,74 +241,142 @@ public class LevelStartScreen : MonoBehaviour {
 		}
 	}
 
-	void facilitadorPorTiempo(){
+	void facilitadorPorTiempo(){// Funcion que aumenta 200seg el tiempo del jugador
 		t_GameStateManager.timeLeft = 600.5f;
 		t_GameStateManager.modifMap = 1;
 	}
 
 //Funciones dificultadoras
-	void safeZoneDestroyer(List<Coordenadas> listaDatosJugador){
-		double[,] posicion = new double[5,2]{{0,0},
-										{0,0},
-										{0,0},
-										{0,0},
-										{0,0}};
-		double fx = 0;
-		double fy =0;
-		int cont = 0;
+	void safeZoneDestroyer(List<Coordenadas> listaDatosJugador){//Funcion que pone obstaculo en las zonas donde el personaje se quede quieto por mucho tiempo
+		double[,] posicion = new double[5,2]; //Matriz que guarda las 5 posiciones en x & donde se quedo quieto mas veces (5 por partida) ;
+		double fx = 0;//variable que guarda la coordenada en X 
+		double fy =0;//Variable que guarda la coordenada en Y
+		int cont = 0;//Contador que guarda el numero de repeticiones 
 		
-		int contp1 = 0;
-		int contp2 = 0;
-		int cantidadBonusEnMapa = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "marioPowerUp").Count());
-		Debug.Log(cantidadBonusEnMapa + " Cantidad  bonus en el mapa recogidos");
-		for (int i = 0; i < ((listaDatosJugador).Count)-1; i++)
+		int contp1 = 0;//Variable para recorrer matriz "posicion" en X de 0 a 5
+		int contp2 = 0;//Variable para recorrer la matriz posicion en Y de 0 a 1;
+
+		for (int i = 0; i < ((listaDatosJugador).Count)-1; i++)//Recorre la lista de datos del jugador
 		{
-
-
-			///////////////////////////////////////////////////////////
-			if (contp1 <5)
+			if (contp1 <5)//Solo guardara 5 obstaculizadores
 			{
-				if (listaDatosJugador[i].cooX==listaDatosJugador[i+1].cooX)
+				if (listaDatosJugador[i].cooX==listaDatosJugador[i+1].cooX)//Compara coordenadas X iguales en 1 vs 1
 				//if (listaDatosJugador[i].cooX==listaDatosJugador[i+1].cooX&&listaDatosJugador[i].cooy==listaDatosJugador[i+1].cooy)
 				{
-					cont++;
-					Debug.Log("numero"+ listaDatosJugador[i].cooX);
+					cont++; //cont aumentara en 1 
+					//Debug.Log("numero"+ listaDatosJugador[i].cooX);
 				}
-				else if(cont >=100)
+				else if(cont >=100)//Si ya no hay repetidos seguidos y contador llego a 100, guardara en posiciones las coordenadas en x & y
 				{
-					Debug.Log("contador cuando pasa 100: "+ cont);
-					fx = listaDatosJugador[i-1].cooX;
-					fy = listaDatosJugador[i-1].cooy;
-					posicion[contp1,contp2] = fx;
-					posicion[contp1,contp2+1] = fy;
-					Debug.Log("fx guardado: "+ fx);
-					Debug.Log("fy guardado: "+ fy);
+					//Debug.Log("contador cuando pasa 100: "+ cont);
+					fx = listaDatosJugador[i-1].cooX;//Guarda la ultima posicion repetida en X
+					fy = listaDatosJugador[i-1].cooy;//Guarda la ultima posicion repetida en Y
+					posicion[contp1,contp2] = fx;//Guarda en posicion la coordenada X
+					posicion[contp1,contp2+1] = fy;//Guarda en posicion la coordenada Y
+					//Debug.Log("fx guardado: "+ fx);
+					//Debug.Log("fy guardado: "+ fy);
 					contp1++;
-					fx = listaDatosJugador[i].cooX;
-					fy = listaDatosJugador[i].cooy;	
-					cont = 0;
+					fx = listaDatosJugador[i].cooX;//creo que sobran
+					fy = listaDatosJugador[i].cooy;//creo que sobran xd
+					cont = 0;//Reinicia contador 
 				}else
 				{
-					cont = 0;
+					cont = 0;//Reinicia contador
 				}		
 			}	
 		}
 
-
-
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 5; i++)//Recorre la matriz posicion
 		{
-			int j = 0;
-			double elemx = posicion[i,j];
-			double elemy = posicion[i,j+1];
-			if (elemx != 0)
+			int j = 0;//variable para recorrer Y en 0 & 1
+			double elemx = posicion[i,j]; //Guarda en elemx la ubicacion guardada en X en la posicion actual de posicion
+			double elemy = posicion[i,j+1];//Guarda en elemy la ubicacion guardada en Y en la posicion actual de posicion
+			if (elemx != 0)//Potege el spawn del jugador
 			{
-				t_GameStateManager.editMarioWorld[Convert.ToInt32(elemx),Convert.ToInt32(elemy)] = 21;
+				t_GameStateManager.editMarioWorld[Convert.ToInt32(elemx),Convert.ToInt32(elemy)] = 21;//Pone el obstaculizador
 			}
 			
 		}
-		
-		
-		
 	}
+
+	void aleatorizarBonusMap(int cantidadBonusEnMapa, int cantidadMonedasEnMapa){//Funcion para aleatorizar los bonificadores 
+		int sumCantidades = cantidadBonusEnMapa + cantidadMonedasEnMapa;//Suma la cantidad de bloques de monedas+bonificadores en el mapa
+		int[] listaRandomBonus = new int[sumCantidades];//Array del tamaño total de bloques de monedas+bonificadores
+		int bonus = cantidadBonusEnMapa;//guarda la cantidad de bonus del mapa 
+		for (int i = 0; i < listaRandomBonus.Length; i++)//Recorre el array vacio y va guardando una cantidad de bonus y despues rellena con monedas
+		{
+			if (bonus != 0)
+			{
+				listaRandomBonus[i] = 4;
+				bonus--;
+			}else
+			{
+				listaRandomBonus[i]= 3;
+			}
+		}
+
+		var rnd = new Random(); //Genera un numero random cada que se llama
+
+		for (int i = listaRandomBonus.Length - 1; i > 0; i--)//Mueve a posiciones diferentes del array todos los elementos
+		{
+			var j = rnd.Next(0, i);
+			var temp = listaRandomBonus[i];
+			listaRandomBonus[i] = listaRandomBonus[j];
+			listaRandomBonus[j] = temp;
+		}
+
+		int aux = 0;//variable auxiliar
+		for (int i = 0; i < 185; i++)//Recorre el array del mapa, verifica si es moneda o bonificador y lo cambia por el orden del array 
+		{
+			for (int j = 0; j < 14; j++)
+			{
+				if(t_GameStateManager.editMarioWorld[i,j] == 3 ||t_GameStateManager.editMarioWorld[i,j] == 4)
+				{
+					t_GameStateManager.editMarioWorld[i,j]= listaRandomBonus[aux];
+					aux++;
+				}
+			}
+		}
+	}
+
+	int buscarElementos(int idElemento){//Busca la cantidad de elementos que hay en un array bidimensional
+		int numElemento = 0;
+		for (int i = 0; i < 185; i++)
+		{
+			for (int j = 0; j < 14; j++)
+			{
+				if(t_GameStateManager.editMarioWorld[i,j] == idElemento)
+				{
+					numElemento++;
+				}
+			}
+		}
+		return numElemento;
+	}
+
+	void rageEnemy(){
+		if (t_GameStateManager.controlVelocidad >= 3 && t_GameStateManager.controlVelocidad <= 5)
+		{
+			t_GameStateManager.controlVelocidad++; 
+		}else if (t_GameStateManager.controlVelocidad >5 && t_GameStateManager.controlVelocidad <= 7)
+		{
+			
+			t_GameStateManager.controlVelocidad++; 
+		}else if (t_GameStateManager.controlVelocidad > 7 && t_GameStateManager.controlVelocidad <= 10)
+		{
+			t_GameStateManager.controlVelocidad++; 
+		}
+	}
+
+	void limpiadorPorIteracion(string str1, string str2){
+		foreach (var item in t_GameStateManager.playerLevelData)
+			{
+				if (item.mov == str1)
+				{
+					item.mov = str2;
+				}
+			}
+	}
+
+
 }
