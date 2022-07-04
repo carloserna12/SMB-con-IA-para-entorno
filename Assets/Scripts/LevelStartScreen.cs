@@ -100,13 +100,13 @@ public class LevelStartScreen : MonoBehaviour {
 			int cantidadEnemigosMatados = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "enemyDead").Count());
 			int cantidadBonusEnMapa = buscarElementos(4);
 			int cantidadMonedasEnMapa = buscarElementos(3);
-			int cantidadGoombasMapa = buscarElementos(9);
+			int cantidadGoombasMapa = buscarElementos(12);
 			int cantidadKoopasMapa = buscarElementos(10);
 			int cantidadKoopasVoladoresMapa = buscarElementos(11);
 			int cantidadEnemigosTotal = cantidadGoombasMapa + cantidadKoopasMapa + cantidadKoopasVoladoresMapa;
 
 			limpiadorPorIteracion("marioPowerUp","marioPowerUpDone");
-			//limpiadorPorIteracion("enemyDead","enemyDeadDone");
+			limpiadorPorIteracion("enemyDead","enemyDeadDone");
 
 			if (cantidadBonusRecolectados == cantidadBonusEnMapa)
 			{
@@ -115,7 +115,7 @@ public class LevelStartScreen : MonoBehaviour {
 			}
 			safeZoneDestroyer(t_GameStateManager.playerLevelData);//Llama la funcion safeZoneDestroyer
 			
-			rageEnemy();
+			rageEnemy(cantidadEnemigosTotal,cantidadEnemigosMatados);
 		}
 		
 		
@@ -140,7 +140,7 @@ public class LevelStartScreen : MonoBehaviour {
 	void limpiarMatriz(List<Coordenadas> listaDatosJugador){//Funcion que limpia la lista de informacion
         for (int i = 0; i < (listaDatosJugador).Count; i++)//Recorre la lista
 		{
-			if (i <= ((listaDatosJugador).Count)-5)//Resta 5 para evitar desbordamiento "arreglar"
+			if (i <= ((listaDatosJugador).Count)-5)//Resta 5 para evitar desbordamiento **"arreglar"
 			{
 				if (listaDatosJugador[i].mov == listaDatosJugador[i+1].mov &&//Elimina similitudes de 1 vs 1
 					listaDatosJugador[i].cooX == listaDatosJugador[i+1].cooX &&
@@ -351,20 +351,39 @@ public class LevelStartScreen : MonoBehaviour {
 				}
 			}
 		}
+		Debug.Log(numElemento + " numElñemento");
 		return numElemento;
 	}
 
-	void rageEnemy(){
-		if (t_GameStateManager.controlVelocidad >= 3 && t_GameStateManager.controlVelocidad <= 5)
+	void rageEnemy(int cantidadEnemigosTotal,int cantidadEnemigosMatados){
+		if (cantidadEnemigosMatados <= cantidadEnemigosTotal/3)
 		{
-			t_GameStateManager.controlVelocidad++; 
-		}else if (t_GameStateManager.controlVelocidad >5 && t_GameStateManager.controlVelocidad <= 7)
+			t_GameStateManager.controlVelocidad++;
+			Debug.Log("Enemigos lvl " + t_GameStateManager.controlVelocidad);
+		}
+		else if (cantidadEnemigosMatados > cantidadEnemigosTotal/3 && cantidadEnemigosMatados <= cantidadEnemigosTotal/2)
 		{
-			
-			t_GameStateManager.controlVelocidad++; 
-		}else if (t_GameStateManager.controlVelocidad > 7 && t_GameStateManager.controlVelocidad <= 10)
+			//Debug.Log(cantidadEnemigosTotal/2 + "Cantidad enemigos en total div 2");
+			if (t_GameStateManager.controlVelocidad <= 5)
+			{
+				t_GameStateManager.controlVelocidad = 6;
+			}else if (t_GameStateManager.controlVelocidad > 5 && t_GameStateManager.controlVelocidad <= 7)
+			{
+				t_GameStateManager.controlVelocidad++;
+			}
+			Debug.Log("Enemigos lvl " + t_GameStateManager.controlVelocidad);
+		}else if (cantidadEnemigosMatados > cantidadEnemigosTotal/2)
 		{
-			t_GameStateManager.controlVelocidad++; 
+			//Debug.Log(cantidadEnemigosTotal + "Cantidad enemigos en total div nope");
+			//Debug.Log(cantidadEnemigosMatados + "noentender");
+			if (t_GameStateManager.controlVelocidad <= 5)
+			{
+				t_GameStateManager.controlVelocidad = 8;
+			}else if (t_GameStateManager.controlVelocidad > 5 && t_GameStateManager.controlVelocidad <= 7)
+			{
+				t_GameStateManager.controlVelocidad = 8;
+			}
+			Debug.Log("Enemigos lvl " + t_GameStateManager.controlVelocidad);
 		}
 	}
 

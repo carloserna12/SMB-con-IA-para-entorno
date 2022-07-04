@@ -16,9 +16,8 @@ public class MoveAndFlip : MonoBehaviour {
 	public Vector2 Speed = new Vector2 (3, 0);
 	private Rigidbody2D m_Rigidbody2D;
 	private GameObject mario;
-
 	public GameStateManager t_GameStateManager;
-
+	
 	// Use this for initialization
 	void Start () {
 		t_GameStateManager = FindObjectOfType<GameStateManager> ();
@@ -41,8 +40,11 @@ public class MoveAndFlip : MonoBehaviour {
 //	}
 
 	// Assuming default sprites face right
+	
+	
+	//int numRam2 = 2;
 	void OrientSprite() {
-		if (directionX > 0) {
+		if (directionX > 0) {	
 			transform.localScale = new Vector3 (1, 1, 1);
 		} else if (directionX < 0) {
 			transform.localScale = new Vector3 (-1, 1, 1);
@@ -58,7 +60,7 @@ public class MoveAndFlip : MonoBehaviour {
 			}else
 			{
 				m_Rigidbody2D.velocity = new Vector2(Speed.x * directionX, m_Rigidbody2D.velocity.y);
-				Debug.Log(m_Rigidbody2D.velocity.y + "VELOCIDADTROLLFACE");
+				
 			}
 			
 		}
@@ -72,13 +74,26 @@ public class MoveAndFlip : MonoBehaviour {
 		bool sideHit = normal == leftSide || normal == rightSide;
 		bool bottomHit = normal == bottomSide;
 
+		if (m_Rigidbody2D.tag == "Enemy") {//Esto pone a saltar a los enemigos
+			if (t_GameStateManager.controlVelocidad >= 3&& t_GameStateManager.controlVelocidad <= 5)
+			{
+				
+				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, t_GameStateManager.controlVelocidad);
+			}else if (t_GameStateManager.controlVelocidad > 5 && t_GameStateManager.controlVelocidad <= 7)
+			{
+				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 7);
+			}else if (t_GameStateManager.controlVelocidad > 7 && t_GameStateManager.controlVelocidad <= 10)
+			{
+				int numRam = Random.Range(10, 17);
+				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, numRam);
+			}
+			
+		}
 		// reverse direction
 		if (other.gameObject.tag != "Player" && sideHit) {
 			directionX = -directionX;
 			OrientSprite ();
-		}
-
-		else if (other.gameObject.tag.Contains("Platform") && bottomHit && canMove) {
+		}else if (other.gameObject.tag.Contains("Platform") && bottomHit && canMove && m_Rigidbody2D.tag != "Enemy" ) {
 			m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, Speed.y);
 		}
 	}
