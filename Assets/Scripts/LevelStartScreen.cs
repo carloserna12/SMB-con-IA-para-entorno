@@ -254,16 +254,21 @@ public class LevelStartScreen : MonoBehaviour {
 		int cont = 0;//Contador que guarda el numero de repeticiones 
 		
 		int contp1 = 0;//Variable para recorrer matriz "posicion" en X de 0 a 5
+		Debug.Log("Iteracion nueva " + contp1);
 		int contp2 = 0;//Variable para recorrer la matriz posicion en Y de 0 a 1;
 
 		for (int i = 0; i < ((listaDatosJugador).Count)-1; i++)//Recorre la lista de datos del jugador
 		{
-			if (contp1 <5)//Solo guardara 5 obstaculizadores
+			if (contp1 <5)//Solo guardara 5 obstaculizadores (rebalanceado)
 			{
-				if (listaDatosJugador[i].cooX==listaDatosJugador[i+1].cooX)//Compara coordenadas X iguales en 1 vs 1
+				if ( listaDatosJugador[i].cooX==listaDatosJugador[i+1].cooX &&
+					listaDatosJugador[i].cooX < 185 ||
+					 (listaDatosJugador[i].cooX != 0 &&  listaDatosJugador[i].cooX < 30 )||
+					 (listaDatosJugador[i].cooX != 0 &&  listaDatosJugador[i].cooX > 35 ))//Compara coordenadas X iguales en 1 vs 1
 				//if (listaDatosJugador[i].cooX==listaDatosJugador[i+1].cooX&&listaDatosJugador[i].cooy==listaDatosJugador[i+1].cooy)
 				{
 					cont++; //cont aumentara en 1 
+					listaDatosJugador.RemoveAt(i);
 					//Debug.Log("numero"+ listaDatosJugador[i].cooX);
 				}
 				else if(cont >=100)//Si ya no hay repetidos seguidos y contador llego a 100, guardara en posiciones las coordenadas en x & y
@@ -273,8 +278,8 @@ public class LevelStartScreen : MonoBehaviour {
 					fy = listaDatosJugador[i-1].cooy;//Guarda la ultima posicion repetida en Y
 					posicion[contp1,contp2] = fx;//Guarda en posicion la coordenada X
 					posicion[contp1,contp2+1] = fy;//Guarda en posicion la coordenada Y
-					//Debug.Log("fx guardado: "+ fx);
-					//Debug.Log("fy guardado: "+ fy);
+					Debug.Log("fx guardado: "+ fx);
+					Debug.Log("fy guardado: "+ fy);
 					contp1++;
 					fx = listaDatosJugador[i].cooX;//creo que sobran
 					fy = listaDatosJugador[i].cooy;//creo que sobran xd
@@ -291,8 +296,10 @@ public class LevelStartScreen : MonoBehaviour {
 			int j = 0;//variable para recorrer Y en 0 & 1
 			double elemx = posicion[i,j]; //Guarda en elemx la ubicacion guardada en X en la posicion actual de posicion
 			double elemy = posicion[i,j+1];//Guarda en elemy la ubicacion guardada en Y en la posicion actual de posicion
-			if (elemx != 0)//Potege el spawn del jugador
+			Debug.Log(elemx +"elemento x");
+			if ((elemx != 0 && elemx < 30 )||  (elemx != 0 && elemx > 35))//Potege el spawn del jugador
 			{
+				Debug.Log(elemx +"bomb has be planted" );
 				t_GameStateManager.editMarioWorld[Convert.ToInt32(elemx),Convert.ToInt32(elemy)] = 21;//Pone el obstaculizador
 			}
 			
