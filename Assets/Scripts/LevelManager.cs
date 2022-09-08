@@ -17,7 +17,8 @@ public class LevelManager : MonoBehaviour {
 	public int coins;
 	public int scores;
 	public float timeLeft;
-	private int timeLeftInt;
+	public int timeLeftInt;
+	public int timeLeftSave = 0;
 
 	private bool isRespawning;
 	private bool isPoweringDown;
@@ -95,6 +96,9 @@ public class LevelManager : MonoBehaviour {
 		t_GameStateManager = FindObjectOfType<GameStateManager>();
 		RetrieveGameState ();
 		//updateData = mario.playerLevelData;
+
+		
+		
 		mario = FindObjectOfType<Mario> ();
 		mario_Animator = mario.gameObject.GetComponent<Animator> ();
 		mario_Rigidbody2D = mario.gameObject.GetComponent<Rigidbody2D> ();
@@ -109,6 +113,9 @@ public class LevelManager : MonoBehaviour {
 		SetHudCoin ();
 		SetHudScore ();
 		SetHudTime ();
+
+		t_GameStateManager.timeLeftSavePerLevel = this.timeLeftSave;
+		Debug.Log(t_GameStateManager.timeLeftSave + "tiempo guardado tio asdjhasdkasjdkljkldsaklj");
 		if (hurryUp) {
 			ChangeMusic (levelMusicHurry);
 		} else {
@@ -491,6 +498,8 @@ public class LevelManager : MonoBehaviour {
 	public void SetHudTime() {
 		timeLeftInt = Mathf.RoundToInt (timeLeft);
 		timeText.text = timeLeftInt.ToString ("D3");
+		timeLeftSave = timeLeftInt;
+		//Debug.Log(timeLeftSave+ "turipripripripripripriprip");
 	}
 
 	public void CreateFloatingText(string text, Vector3 spawnPos) {
@@ -627,6 +636,7 @@ public class LevelManager : MonoBehaviour {
 		timerPaused = true;
 		ChangeMusic (levelCompleteMusic);
 		musicSource.loop = false;
+		t_GameStateManager.timeLeftSave = this.timeLeftSave;
 	}
 
 	public void MarioReachFlagPole() {

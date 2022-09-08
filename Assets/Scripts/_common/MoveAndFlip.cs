@@ -17,13 +17,15 @@ public class MoveAndFlip : MonoBehaviour {
 	private Rigidbody2D m_Rigidbody2D;
 	private GameObject mario;
 	public GameStateManager t_GameStateManager;
-	
+	public int enemigosMuertos;
 	// Use this for initialization
 	void Start () {
 		t_GameStateManager = FindObjectOfType<GameStateManager> ();
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
 		mario = FindObjectOfType<Mario> ().gameObject;
 		OrientSprite ();
+		enemigosMuertos = t_GameStateManager.enemigosKill;
+		Debug.Log(enemigosMuertos + "saaaaaaaaaaaaaaaaaaaaaaaaaaaapeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 	}
 
 									
@@ -57,9 +59,12 @@ public class MoveAndFlip : MonoBehaviour {
 			if (t_GameStateManager.modifMap == 2)
 			{
 				m_Rigidbody2D.velocity = new Vector2(t_GameStateManager.controlVelocidad * directionX, m_Rigidbody2D.velocity.y);
+				Debug.Log(m_Rigidbody2D.velocity);
 			}else
 			{
+				
 				m_Rigidbody2D.velocity = new Vector2(Speed.x * directionX, m_Rigidbody2D.velocity.y);
+				Debug.Log(m_Rigidbody2D.velocity);
 				
 			}
 			
@@ -75,14 +80,14 @@ public class MoveAndFlip : MonoBehaviour {
 		bool bottomHit = normal == bottomSide;
 
 		if (m_Rigidbody2D.tag == "Enemy") {//Esto pone a saltar a los enemigos
-			if (t_GameStateManager.controlVelocidad >= 3&& t_GameStateManager.controlVelocidad <= 5)
+			if (t_GameStateManager.controlVelocidad >= 3&& t_GameStateManager.controlVelocidad <= 4)
 			{
 				
-				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, t_GameStateManager.controlVelocidad);
-			}else if (t_GameStateManager.controlVelocidad > 5 && t_GameStateManager.controlVelocidad <= 7)
+				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0);
+			}else if (t_GameStateManager.controlVelocidad > 4 && t_GameStateManager.controlVelocidad <= 6)
 			{
 				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 7);
-			}else if (t_GameStateManager.controlVelocidad > 7 && t_GameStateManager.controlVelocidad <= 10)
+			}else if (t_GameStateManager.controlVelocidad > 6 && t_GameStateManager.controlVelocidad <= 8)
 			{
 				int numRam = Random.Range(10, 17);
 				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, numRam);

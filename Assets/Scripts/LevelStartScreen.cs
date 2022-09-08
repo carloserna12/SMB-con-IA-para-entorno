@@ -20,6 +20,8 @@ public class LevelStartScreen : MonoBehaviour {
 	public Text livesText;
 	public List<string> updateData = new List<string>();
 	public string jsonSave;
+
+	public LevelManager t_LevelManager;
 	
 	//public MapMaker maper;
 	// Use this for initialization
@@ -45,7 +47,7 @@ public class LevelStartScreen : MonoBehaviour {
 		//////////////
 		//Limpia la matriz de datos del jugador
 		limpiarMatriz(t_GameStateManager.playerLevelData);
-
+		
 		///FUNCIONES DE AYUDA////       
 		if ((t_GameStateManager.modifMap == 0 && t_GameStateManager.lives == 1))//Activador del facilitador
 		{
@@ -96,6 +98,8 @@ public class LevelStartScreen : MonoBehaviour {
 		//FUNCIONES DIFICULTADORES
 		else if (t_GameStateManager.modifMap == 2)//Activador de dificultadores
 		{
+			
+			//Debug.Log(t_GameStateManager.timeLeftSavePerLevel+ "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			int cantidadBonusRecolectados = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "marioPowerUp").Count());//variable que cuenta la cantidad de bonificadores que el jugador uso
 			int cantidadEnemigosMatados = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "enemyDead").Count());
 			int cantidadBonusEnMapa = buscarElementos(4);
@@ -111,11 +115,16 @@ public class LevelStartScreen : MonoBehaviour {
 			if (cantidadBonusRecolectados == cantidadBonusEnMapa)
 			{
 				Debug.Log("Entro en aleatorizar");
-				aleatorizarBonusMap(cantidadBonusEnMapa,cantidadMonedasEnMapa);
+				aleatorizarBonusMap(cantidadBonusEnMapa,cantidadMonedasEnMapa,1);
+			}else if (cantidadBonusRecolectados != 0)
+			{
+				aleatorizarBonusMap(cantidadBonusEnMapa,cantidadMonedasEnMapa,2);
 			}
 			safeZoneDestroyer(t_GameStateManager.playerLevelData);//Llama la funcion safeZoneDestroyer
 			
 			rageEnemy(cantidadEnemigosTotal,cantidadEnemigosMatados);
+
+			tiempoPorNivel(t_GameStateManager.timeLeftSave, t_GameStateManager.timeLeftSavePerLevel);
 		}
 		
 		
@@ -306,7 +315,7 @@ public class LevelStartScreen : MonoBehaviour {
 		}
 	}
 
-	void aleatorizarBonusMap(int cantidadBonusEnMapa, int cantidadMonedasEnMapa){//Funcion para aleatorizar los bonificadores 
+	void aleatorizarBonusMap(int cantidadBonusEnMapa, int cantidadMonedasEnMapa, int dividendo){//Funcion para aleatorizar los bonificadores 
 		int sumCantidades = cantidadBonusEnMapa + cantidadMonedasEnMapa;//Suma la cantidad de bloques de monedas+bonificadores en el mapa
 		int[] listaRandomBonus = new int[sumCantidades];//Array del tamaño total de bloques de monedas+bonificadores
 		int bonus = cantidadBonusEnMapa;//guarda la cantidad de bonus del mapa 
@@ -324,7 +333,7 @@ public class LevelStartScreen : MonoBehaviour {
 
 		var rnd = new Random(); //Genera un numero random cada que se llama
 
-		for (int i = listaRandomBonus.Length - 1; i > 0; i--)//Mueve a posiciones diferentes del array todos los elementos
+		for (int i = (listaRandomBonus.Length)/dividendo - 1; i > 0; i--)//Mueve a posiciones diferentes del array todos los elementos
 		{
 			var j = rnd.Next(0, i);
 			var temp = listaRandomBonus[i];
@@ -363,34 +372,55 @@ public class LevelStartScreen : MonoBehaviour {
 	}
 
 	void rageEnemy(int cantidadEnemigosTotal,int cantidadEnemigosMatados){
+		t_GameStateManager.enemigosKill = cantidadEnemigosMatados;////////////
 		if (cantidadEnemigosMatados <= cantidadEnemigosTotal/3)
 		{
-			t_GameStateManager.controlVelocidad++;
-			Debug.Log("Enemigos lvl " + t_GameStateManager.controlVelocidad);
+			if (t_GameStateManager.controlVelocidad < 8)
+			{
+				t_GameStateManager.controlVelocidad++;
+			}else 
+			{
+				t_GameStateManager.controlVelocidad = 8;
+			}
+			
+			//t_GameStateManager.controlVelocidad++;
+			//Debug.Log("Enemigos lvl " + t_GameStateManager.controlVelocidad);
+			
 		}
 		else if (cantidadEnemigosMatados > cantidadEnemigosTotal/3 && cantidadEnemigosMatados <= cantidadEnemigosTotal/2)
 		{
 			//Debug.Log(cantidadEnemigosTotal/2 + "Cantidad enemigos en total div 2");
-			if (t_GameStateManager.controlVelocidad <= 5)
+			if (t_GameStateManager.controlVelocidad <= 4)
 			{
-				t_GameStateManager.controlVelocidad = 6;
-			}else if (t_GameStateManager.controlVelocidad > 5 && t_GameStateManager.controlVelocidad <= 7)
+				t_GameStateManager.controlVelocidad = 5;
+			}else if (t_GameStateManager.controlVelocidad > 4 && t_GameStateManager.controlVelocidad <= 6)
 			{
 				t_GameStateManager.controlVelocidad++;
+			}else if(t_GameStateManager.controlVelocidad == 7)
+			{
+				t_GameStateManager.controlVelocidad++;
+			}else if (t_GameStateManager.controlVelocidad == 8)
+			{
+				t_GameStateManager.controlVelocidad = 8;
 			}
 			Debug.Log("Enemigos lvl " + t_GameStateManager.controlVelocidad);
+			
 		}else if (cantidadEnemigosMatados > cantidadEnemigosTotal/2)
 		{
 			//Debug.Log(cantidadEnemigosTotal + "Cantidad enemigos en total div nope");
 			//Debug.Log(cantidadEnemigosMatados + "noentender");
-			if (t_GameStateManager.controlVelocidad <= 5)
+			if (t_GameStateManager.controlVelocidad <= 4)
+			{
+				t_GameStateManager.controlVelocidad = 7;
+			}else if (t_GameStateManager.controlVelocidad > 4 && t_GameStateManager.controlVelocidad <= 7)
 			{
 				t_GameStateManager.controlVelocidad = 8;
-			}else if (t_GameStateManager.controlVelocidad > 5 && t_GameStateManager.controlVelocidad <= 7)
+			}else
 			{
 				t_GameStateManager.controlVelocidad = 8;
 			}
 			Debug.Log("Enemigos lvl " + t_GameStateManager.controlVelocidad);
+			
 		}
 	}
 
@@ -404,5 +434,16 @@ public class LevelStartScreen : MonoBehaviour {
 			}
 	}
 
-
+	void tiempoPorNivel(int tiempoFinalPorNivel, int tiempoFinalAcumulado){
+		if (tiempoFinalPorNivel >= (tiempoFinalAcumulado*0.75))
+		{
+			t_GameStateManager.timeLeft = tiempoFinalAcumulado -Convert.ToSingle(tiempoFinalAcumulado*0.08) ;
+		}else if (tiempoFinalPorNivel >= (tiempoFinalAcumulado*0.50))
+		{
+			t_GameStateManager.timeLeft = tiempoFinalAcumulado -Convert.ToSingle(tiempoFinalAcumulado*0.05) ;
+		}if (tiempoFinalPorNivel >= (tiempoFinalAcumulado*0.25))
+		{
+			t_GameStateManager.timeLeft = tiempoFinalAcumulado -Convert.ToSingle(tiempoFinalAcumulado*0.02) ;
+		}
+	}
 }

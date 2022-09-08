@@ -18,8 +18,11 @@ public class GameStateManager : MonoBehaviour {
 	
 	public string sceneToLoad; // what scene to load after level start screen finishes?
 	public bool timeup;
+    public int timeLeftSave;
+    public int timeLeftSavePerLevel;
 
 	public int modifMap = 0;
+    public int enemigosKill = 0;
 
     public int controlVelocidad = 3;
 	
