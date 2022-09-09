@@ -102,12 +102,14 @@ public class LevelStartScreen : MonoBehaviour {
 			//Debug.Log(t_GameStateManager.timeLeftSavePerLevel+ "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 			int cantidadBonusRecolectados = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "marioPowerUp").Count());//variable que cuenta la cantidad de bonificadores que el jugador uso
 			int cantidadEnemigosMatados = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "enemyDead").Count());
+			int cantidadEnemigosEspecialesMatados = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "enemyEspecialDead").Count());
 			int cantidadBonusEnMapa = buscarElementos(4);
 			int cantidadMonedasEnMapa = buscarElementos(3);
 			int cantidadGoombasMapa = buscarElementos(12);
 			int cantidadKoopasMapa = buscarElementos(10);
 			int cantidadKoopasVoladoresMapa = buscarElementos(11);
 			int cantidadEnemigosTotal = cantidadGoombasMapa + cantidadKoopasMapa + cantidadKoopasVoladoresMapa;
+			int caminoSuperiorDetectado = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "caminoSuperior").Count());
 
 			limpiadorPorIteracion("marioPowerUp","marioPowerUpDone");
 			limpiadorPorIteracion("enemyDead","enemyDeadDone");
@@ -125,6 +127,14 @@ public class LevelStartScreen : MonoBehaviour {
 			rageEnemy(cantidadEnemigosTotal,cantidadEnemigosMatados);
 
 			tiempoPorNivel(t_GameStateManager.timeLeftSave, t_GameStateManager.timeLeftSavePerLevel);
+
+			if (cantidadEnemigosEspecialesMatados != 0)
+			{
+				enemigosEspeciales(t_GameStateManager.playerLevelData);
+			}
+
+			caminoTomado(caminoSuperiorDetectado);
+
 		}
 		
 		
@@ -445,5 +455,35 @@ public class LevelStartScreen : MonoBehaviour {
 		{
 			t_GameStateManager.timeLeft = tiempoFinalAcumulado -Convert.ToSingle(tiempoFinalAcumulado*0.02) ;
 		}
+	}
+
+	void enemigosEspeciales(List<Coordenadas> listaDatosJugador)
+	{
+		for (int i = 0; i < 185; i++)//Recorre el array del mapa 
+		{
+			for (int j = 0; j < 14; j++)
+			{
+				if(t_GameStateManager.editMarioWorld[i,j] == 10 || t_GameStateManager.editMarioWorld[i,j] == 11)
+				{
+					t_GameStateManager.editMarioWorld[i,j]= 11;
+
+					if (t_GameStateManager.editMarioWorld[i-3,j] == 0)
+					{
+						t_GameStateManager.editMarioWorld[i-3,j]= 11;
+					}else if (t_GameStateManager.editMarioWorld[i+3,j]== 0)
+					{
+						t_GameStateManager.editMarioWorld[i+3,j]= 11;
+					}
+					
+				}
+			}
+		}
+			
+		
+	}
+
+	void caminoTomado(int caminoSuperiorDetectado)
+	{
+		///
 	}
 }

@@ -25,7 +25,7 @@ public class MoveAndFlip : MonoBehaviour {
 		mario = FindObjectOfType<Mario> ().gameObject;
 		OrientSprite ();
 		enemigosMuertos = t_GameStateManager.enemigosKill;
-		Debug.Log(enemigosMuertos + "saaaaaaaaaaaaaaaaaaaaaaaaaaaapeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+		//Debug.Log(enemigosMuertos + "saaaaaaaaaaaaaaaaaaaaaaaaaaaapeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 	}
 
 									
@@ -59,12 +59,12 @@ public class MoveAndFlip : MonoBehaviour {
 			if (t_GameStateManager.modifMap == 2)
 			{
 				m_Rigidbody2D.velocity = new Vector2(t_GameStateManager.controlVelocidad * directionX, m_Rigidbody2D.velocity.y);
-				Debug.Log(m_Rigidbody2D.velocity);
+				//Debug.Log(m_Rigidbody2D.velocity);
 			}else
 			{
 				
 				m_Rigidbody2D.velocity = new Vector2(Speed.x * directionX, m_Rigidbody2D.velocity.y);
-				Debug.Log(m_Rigidbody2D.velocity);
+				//Debug.Log(m_Rigidbody2D.velocity);
 				
 			}
 			
@@ -82,7 +82,6 @@ public class MoveAndFlip : MonoBehaviour {
 		if (m_Rigidbody2D.tag == "Enemy") {//Esto pone a saltar a los enemigos
 			if (t_GameStateManager.controlVelocidad >= 3&& t_GameStateManager.controlVelocidad <= 4)
 			{
-				
 				m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, 0);
 			}else if (t_GameStateManager.controlVelocidad > 4 && t_GameStateManager.controlVelocidad <= 6)
 			{

@@ -369,6 +369,24 @@ public class LevelManager : MonoBehaviour {
 		Debug.Log (this.name + " MarioStompEnemy called on " + enemy.gameObject.name);
 		Coordenadas coor = new Coordenadas("enemyDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
 		t_GameStateManager.playerLevelData.Add(coor);	
+
+		Debug.Log(t_GameStateManager.modifMap + "TEQUILAAAAAAAAAAAAAA");
+		////
+		if (enemy.name == "Red Winged Koopa(Clone)" || enemy.name == "Red Winged Koopa" || enemy.name == "Green Koopa(Clone)")
+		{
+			coor = new Coordenadas("enemyEspecialDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
+			t_GameStateManager.playerLevelData.Add(coor);
+		}
+		Debug.Log("enemy is " + enemy.name);
+
+		if (marioSize < 2 && t_GameStateManager.modifMap == 2) {
+			if (enemy.name == "Red Winged Koopa(Clone)" || enemy.name == "Red Winged Koopa" || enemy.name == "Green Koopa(Clone)" )
+			{
+				StartCoroutine (MarioPowerUpCo ());
+			}
+			
+		}
+		
 	}
 
 	public void MarioStarmanTouchEnemy(Enemy enemy) {

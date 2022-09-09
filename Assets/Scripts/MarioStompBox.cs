@@ -6,6 +6,9 @@ public class MarioStompBox : MonoBehaviour {
 	private LevelManager t_LevelManager;
 	private GameStateManager arrayMov;
 
+
+	//private bool random;
+
 	// Use this for initialization
 	void Start () {
 		t_LevelManager = FindObjectOfType<LevelManager> ();
@@ -28,6 +31,8 @@ public class MarioStompBox : MonoBehaviour {
 
 			Coordenadas coor = new Coordenadas(other.gameObject.name,Math.Round(transform.position.x),Math.Round(transform.position.y));
 			arrayMov.playerLevelData.Add(coor);
+
+			
 			//arrayMov.playerLevelData.Add("Kill");
 			
 		}

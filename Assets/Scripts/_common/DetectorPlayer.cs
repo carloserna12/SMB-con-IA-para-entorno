@@ -6,25 +6,20 @@ using System;
 [Serializable] 
 public class DetectorPlayer : MonoBehaviour
 {
-    private GameStateManager arrayMov;
+    private GameStateManager t_GameStateManager;
+    public Coordenadas coor;
     // Start is called before the first frame update
     void Start()
     {
-        arrayMov = FindObjectOfType<GameStateManager> ();
+        t_GameStateManager = FindObjectOfType<GameStateManager> ();
        
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         
     }
 
     void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag == "Player") {
-			
-           //arrayMov.playerLevelData.Add(gameObject.name);
+			coor = new Coordenadas("caminoSuperior",0,0);
+           t_GameStateManager.playerLevelData.Add(coor);
 
             
             if(gameObject.activeSelf){
