@@ -36,6 +36,7 @@ public class CollectibleBlock : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other) {
 		time2 = Time.time;
+		
 		if (other.tag == "Player" && time2 - time1 >= WaitBetweenBounce) {
 			t_LevelManager.soundSource.PlayOneShot (t_LevelManager.bumpSound);
 
@@ -51,18 +52,27 @@ public class CollectibleBlock : MonoBehaviour {
 					if (isPowerupBlock) { // spawn mushroom or fireflower depending on Mario's size
 						if (t_LevelManager.marioSize == 0) {
 							objectToSpawn = bigMushroom;
-								
+							Debug.Log("LE PEGO A UN BIGMUSH");
 						} else {
 							objectToSpawn = fireFlower;	
-							
+							Debug.Log("LE PEGO A UN FLOWER");
 						}
+						
 					}
+					//Debug.Log(objectToSpawn.name);
+					if (objectToSpawn.name == "Block Coin")
+					{
+						Coordenadas coor = new Coordenadas("COIN",0,0);
+						ArrayMov.playerLevelData.Add(coor);	
+					}
+					
 					Instantiate (objectToSpawn, transform.position + spawnPositionOffset, Quaternion.identity);
 					timesToSpawn--;
 
 					if (timesToSpawn == 0) {
 						m_Animator.SetTrigger ("deactivated");
 						isActive = false;
+						
 						
 					}			
 				}
@@ -72,6 +82,7 @@ public class CollectibleBlock : MonoBehaviour {
 			}
 
 			time1 = Time.time;
+			
 		}
 	}
 

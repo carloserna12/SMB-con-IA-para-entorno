@@ -30,7 +30,7 @@ public class LevelStartScreen : MonoBehaviour {
 		//maper = FindObjectOfType<MapMaker>();
 		t_GameStateManager = FindObjectOfType<GameStateManager> ();
 		string worldName = t_GameStateManager.sceneToLoad;
-		Debug.Log(t_GameStateManager.editMarioWorld);
+		//Debug.Log(t_GameStateManager.editMarioWorld);
 		
 		WorldTextHUD.text = Regex.Split (worldName, "World ")[1];
 		ScoreTextHUD.text = t_GameStateManager.scores.ToString ("D6");
@@ -110,17 +110,19 @@ public class LevelStartScreen : MonoBehaviour {
 			int cantidadKoopasVoladoresMapa = buscarElementos(11);
 			int cantidadEnemigosTotal = cantidadGoombasMapa + cantidadKoopasMapa + cantidadKoopasVoladoresMapa;
 			int caminoSuperiorDetectado = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "caminoSuperior").Count());
-
+			int caminoInferiorDetectado = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "caminoInferior").Count());
+			int cantidadMonedasRecolectados = (t_GameStateManager.playerLevelData.Where(x=> x.mov == "COIN").Count());
 			limpiadorPorIteracion("marioPowerUp","marioPowerUpDone");
 			limpiadorPorIteracion("enemyDead","enemyDeadDone");
+			limpiadorPorIteracion("COIN","COINDone");
 
-			if (cantidadBonusRecolectados == cantidadBonusEnMapa)
+			if (cantidadBonusRecolectados == cantidadBonusEnMapa || cantidadMonedasRecolectados == cantidadMonedasEnMapa)
 			{
 				Debug.Log("Entro en aleatorizar");
-				aleatorizarBonusMap(cantidadBonusEnMapa,cantidadMonedasEnMapa,1);
-			}else if (cantidadBonusRecolectados != 0)
+				aleatorizarBonusMap(cantidadBonusEnMapa,cantidadMonedasEnMapa,cantidadBonusRecolectados,cantidadMonedasRecolectados);
+			}else if (cantidadBonusRecolectados != 0 || cantidadMonedasRecolectados != 0)
 			{
-				aleatorizarBonusMap(cantidadBonusEnMapa,cantidadMonedasEnMapa,2);
+				aleatorizarBonusMap(cantidadBonusEnMapa,cantidadMonedasEnMapa,cantidadBonusRecolectados,cantidadMonedasRecolectados);
 			}
 			safeZoneDestroyer(t_GameStateManager.playerLevelData);//Llama la funcion safeZoneDestroyer
 			
@@ -133,7 +135,17 @@ public class LevelStartScreen : MonoBehaviour {
 				enemigosEspeciales(t_GameStateManager.playerLevelData);
 			}
 
-			caminoTomado(caminoSuperiorDetectado);
+			if (caminoSuperiorDetectado != 0 && caminoInferiorDetectado == 0)
+			{
+				caminoTomado(caminoSuperiorDetectado);
+			}else if (caminoSuperiorDetectado == 0 && caminoInferiorDetectado != 0)
+			{
+				caminoTomadoInferior(caminoInferiorDetectado);
+			}else if (caminoSuperiorDetectado != 0 && caminoInferiorDetectado != 0){
+				caminoTomado(caminoSuperiorDetectado);
+				caminoTomadoInferior(caminoInferiorDetectado);
+			}
+			
 
 		}
 		
@@ -199,7 +211,7 @@ public class LevelStartScreen : MonoBehaviour {
 					
 				}else
 				{
-					Debug.Log("No se pudo limpiar mas");
+					//Debug.Log("No se pudo limpiar mas");
 				}
 				
 			}
@@ -297,11 +309,11 @@ public class LevelStartScreen : MonoBehaviour {
 					fy = listaDatosJugador[i-1].cooy;//Guarda la ultima posicion repetida en Y
 					posicion[contp1,contp2] = fx;//Guarda en posicion la coordenada X
 					posicion[contp1,contp2+1] = fy;//Guarda en posicion la coordenada Y
-					Debug.Log("fx guardado: "+ fx);
-					Debug.Log("fy guardado: "+ fy);
+					//Debug.Log("fx guardado: "+ fx);
+					//Debug.Log("fy guardado: "+ fy);
 					contp1++;
-					fx = listaDatosJugador[i].cooX;//creo que sobran
-					fy = listaDatosJugador[i].cooy;//creo que sobran xd
+					//fx = listaDatosJugador[i].cooX;//creo que sobran
+					//fy = listaDatosJugador[i].cooy;//creo que sobran xd
 					cont = 0;//Reinicia contador 
 				}else
 				{
@@ -315,20 +327,23 @@ public class LevelStartScreen : MonoBehaviour {
 			int j = 0;//variable para recorrer Y en 0 & 1
 			double elemx = posicion[i,j]; //Guarda en elemx la ubicacion guardada en X en la posicion actual de posicion
 			double elemy = posicion[i,j+1];//Guarda en elemy la ubicacion guardada en Y en la posicion actual de posicion
-			Debug.Log(elemx +"elemento x");
+			//Debug.Log(elemx +"elemento x");
 			if ((elemx != 0 && elemx < 30 )||  (elemx != 0 && elemx > 35))//Potege el spawn del jugador
 			{
-				Debug.Log(elemx +"bomb has be planted" );
+				//Debug.Log(elemx +"bomb has be planted" );
 				t_GameStateManager.editMarioWorld[Convert.ToInt32(elemx),Convert.ToInt32(elemy)] = 21;//Pone el obstaculizador
 			}
 			
 		}
 	}
 
-	void aleatorizarBonusMap(int cantidadBonusEnMapa, int cantidadMonedasEnMapa, int dividendo){//Funcion para aleatorizar los bonificadores 
-		int sumCantidades = cantidadBonusEnMapa + cantidadMonedasEnMapa;//Suma la cantidad de bloques de monedas+bonificadores en el mapa
+	void aleatorizarBonusMap(int cantidadBonusEnMapa, int cantidadMonedasEnMapa, int cantidadBonusRecolectados, int cantidadMonedasRecolectados){//Funcion para aleatorizar los bonificadores 
+		//int sumCantidades = cantidadBonusEnMapa + cantidadMonedasEnMapa;//Suma la cantidad de bloques de monedas+bonificadores en el mapa
+		int sumCantidades = cantidadBonusRecolectados + cantidadMonedasRecolectados;
 		int[] listaRandomBonus = new int[sumCantidades];//Array del tamaño total de bloques de monedas+bonificadores
-		int bonus = cantidadBonusEnMapa;//guarda la cantidad de bonus del mapa 
+		//int bonus = cantidadBonusEnMapa;//guarda la cantidad de bonus del mapa 
+		int bonus = cantidadBonusRecolectados;
+		//Debug.Log(cantidadMonedasRecolectados + "LISTA RANDOM DE BONUS");
 		for (int i = 0; i < listaRandomBonus.Length; i++)//Recorre el array vacio y va guardando una cantidad de bonus y despues rellena con monedas
 		{
 			if (bonus != 0)
@@ -340,10 +355,11 @@ public class LevelStartScreen : MonoBehaviour {
 				listaRandomBonus[i]= 3;
 			}
 		}
+		
 
 		var rnd = new Random(); //Genera un numero random cada que se llama
-
-		for (int i = (listaRandomBonus.Length)/dividendo - 1; i > 0; i--)//Mueve a posiciones diferentes del array todos los elementos
+		//Debug.Log(listaRandomBonus.Length + "LISTA RANDOM DE BONUS TAMAÑO");
+		for (int i = (listaRandomBonus.Length)- 1; i > 0; i--)//Mueve a posiciones diferentes del array todos los elementos
 		{
 			var j = rnd.Next(0, i);
 			var temp = listaRandomBonus[i];
@@ -351,16 +367,26 @@ public class LevelStartScreen : MonoBehaviour {
 			listaRandomBonus[j] = temp;
 		}
 
+
+		/*foreach(var s in listaRandomBonus)
+            {
+                Debug.Log(s);
+            }
+		*/
 		int aux = 0;//variable auxiliar
 		for (int i = 0; i < 185; i++)//Recorre el array del mapa, verifica si es moneda o bonificador y lo cambia por el orden del array 
 		{
 			for (int j = 0; j < 14; j++)
-			{
-				if(t_GameStateManager.editMarioWorld[i,j] == 3 ||t_GameStateManager.editMarioWorld[i,j] == 4)
+			{	
+				if (aux != listaRandomBonus.Length)
 				{
-					t_GameStateManager.editMarioWorld[i,j]= listaRandomBonus[aux];
-					aux++;
+					if(t_GameStateManager.editMarioWorld[i,j] == 3 ||t_GameStateManager.editMarioWorld[i,j] == 4)
+					{
+						t_GameStateManager.editMarioWorld[i,j]= listaRandomBonus[aux];
+						aux++;
+					}
 				}
+				
 			}
 		}
 	}
@@ -377,11 +403,13 @@ public class LevelStartScreen : MonoBehaviour {
 				}
 			}
 		}
-		Debug.Log(numElemento + " numElñemento");
+		//Debug.Log(numElemento + " numElñemento");
 		return numElemento;
 	}
 
 	void rageEnemy(int cantidadEnemigosTotal,int cantidadEnemigosMatados){
+		Debug.Log("cantidadEnemigosTotal: " + cantidadEnemigosTotal);
+		Debug.Log("cantidadEnemigosMatados: " + cantidadEnemigosMatados);
 		t_GameStateManager.enemigosKill = cantidadEnemigosMatados;////////////
 		if (cantidadEnemigosMatados <= cantidadEnemigosTotal/3)
 		{
@@ -413,7 +441,7 @@ public class LevelStartScreen : MonoBehaviour {
 			{
 				t_GameStateManager.controlVelocidad = 8;
 			}
-			Debug.Log("Enemigos lvl " + t_GameStateManager.controlVelocidad);
+			//Debug.Log("Enemigos lvl " + t_GameStateManager.controlVelocidad);
 			
 		}else if (cantidadEnemigosMatados > cantidadEnemigosTotal/2)
 		{
@@ -429,7 +457,7 @@ public class LevelStartScreen : MonoBehaviour {
 			{
 				t_GameStateManager.controlVelocidad = 8;
 			}
-			Debug.Log("Enemigos lvl " + t_GameStateManager.controlVelocidad);
+			//Debug.Log("Enemigos lvl " + t_GameStateManager.controlVelocidad);
 			
 		}
 	}
@@ -448,12 +476,15 @@ public class LevelStartScreen : MonoBehaviour {
 		if (tiempoFinalPorNivel >= (tiempoFinalAcumulado*0.75))
 		{
 			t_GameStateManager.timeLeft = tiempoFinalAcumulado -Convert.ToSingle(tiempoFinalAcumulado*0.08) ;
+			Debug.Log("Reduccion del -8% - "+"Tiempo total anterior:" + tiempoFinalAcumulado+"Tiempo restado: "+(Convert.ToSingle(tiempoFinalAcumulado*0.08))+ "Nuevo tiempo: "+t_GameStateManager.timeLeft);
 		}else if (tiempoFinalPorNivel >= (tiempoFinalAcumulado*0.50))
 		{
 			t_GameStateManager.timeLeft = tiempoFinalAcumulado -Convert.ToSingle(tiempoFinalAcumulado*0.05) ;
-		}if (tiempoFinalPorNivel >= (tiempoFinalAcumulado*0.25))
+			Debug.Log("Reduccion del -5% - "+"Tiempo total anterior:" + tiempoFinalAcumulado+"Tiempo restado: "+(Convert.ToSingle(tiempoFinalAcumulado*0.05))+ "Nuevo tiempo: "+t_GameStateManager.timeLeft);
+		}else if (tiempoFinalPorNivel >= (tiempoFinalAcumulado*0.25))
 		{
 			t_GameStateManager.timeLeft = tiempoFinalAcumulado -Convert.ToSingle(tiempoFinalAcumulado*0.02) ;
+			Debug.Log("Reduccion del -2% - "+"Tiempo total anterior:" + tiempoFinalAcumulado+"Tiempo restado: "+(Convert.ToSingle(tiempoFinalAcumulado*0.02))+ "Nuevo tiempo: "+t_GameStateManager.timeLeft);
 		}
 	}
 
@@ -484,6 +515,68 @@ public class LevelStartScreen : MonoBehaviour {
 
 	void caminoTomado(int caminoSuperiorDetectado)
 	{
-		///
+		var rnd = new Random();
+		var j = rnd.Next(76, 89);
+		var k = rnd.Next(10, 12);
+		Debug.Log( t_GameStateManager.editMarioWorld[76,9]);
+		var aux = 1;
+		for (int i = 76; i < 89; i++)
+		{
+			if (t_GameStateManager.editMarioWorld[i,9]== 6 && aux != 0)
+			{
+				t_GameStateManager.editMarioWorld[j,9]= 0;
+				t_GameStateManager.editMarioWorld[j,k]= 6;
+				//Debug.Log("EFECTIVAMENTE " + t_GameStateManager.editMarioWorld[j,k]);
+			}
+		}
+		aux = 1;
+		
+		
+	}
+
+	void caminoTomadoInferior(int caminoInferiorDetectado)
+	{
+		var rnd = new Random();
+		var j = rnd.Next(67, 112);
+		var k = rnd.Next(0, 1);
+		Debug.Log("inferior activado");
+		var aux = 1;
+		//var aux2 = 0;
+		for (int i = 67; i < 112; i++)
+		{
+			if (t_GameStateManager.editMarioWorld[i,0]== 2 && aux != 0)
+			{
+				Debug.Log("Activo por deteccion de bloque libre");
+				if (t_GameStateManager.editMarioWorld[i-1,0]!= 0)
+				{
+					verificarAdyacentes(i-1,j);
+				}else if (t_GameStateManager.editMarioWorld[i-2,0]!= 0)
+				{
+					verificarAdyacentes(i-2,j);
+				}else if (t_GameStateManager.editMarioWorld[i-3,0]!= 0)
+				{
+					verificarAdyacentes(i-3,j);
+				}
+			}
+		}
+		aux = 1;
+	}
+
+	void verificarAdyacentes(int i, int j)
+	{
+		int aux2 = 0;
+		for (int b = 1; b <= 5; b++)
+		{
+			if (t_GameStateManager.editMarioWorld[i+b,0]==0)
+			{
+				aux2++;
+			}
+		}
+		if (aux2<=4)
+		{
+			t_GameStateManager.editMarioWorld[j,0]= 0;
+			t_GameStateManager.editMarioWorld[j,1]= 0;
+			Debug.Log("Eliminacion inferior" + t_GameStateManager.editMarioWorld[j,0]);
+		}
 	}
 }

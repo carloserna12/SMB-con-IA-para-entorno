@@ -298,17 +298,17 @@ public class MapMaker : MonoBehaviour
         if (t_GameStateManager.modifMap == 0)
         {
             this.GenerateTiles(normalMarioWorld);
-            Debug.Log(t_GameStateManager.modifMap + "MODIFICADOR DO MAPA2");
+            //Debug.Log(t_GameStateManager.modifMap + "Cambio de modo: 2");
             
         }else
         {
             GenerateTiles(t_GameStateManager.editMarioWorld);
-            Debug.Log(t_GameStateManager.modifMap+"MODIFICADOR DO MAPA");
+            //Debug.Log(t_GameStateManager.modifMap+"Modo 1");
         }
         
 
         string str = string.Join(",",updateData);
-        Debug.Log(str);
+        //Debug.Log(str);
         
     }
 

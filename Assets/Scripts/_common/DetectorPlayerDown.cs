@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable] 
-public class DetectorPlayer : MonoBehaviour
+public class DetectorPlayerDown : MonoBehaviour
 {
     private GameStateManager t_GameStateManager;
     public Coordenadas coor;
@@ -18,7 +18,7 @@ public class DetectorPlayer : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag == "Player") {
-			coor = new Coordenadas("caminoSuperior",0,0);
+			coor = new Coordenadas("caminoInferior",0,0);
             t_GameStateManager.playerLevelData.Add(coor);
             //Debug.Log(other.name + "ESTE ES EL NOMBRE MARACATON");
 

@@ -115,7 +115,7 @@ public class LevelManager : MonoBehaviour {
 		SetHudTime ();
 
 		t_GameStateManager.timeLeftSavePerLevel = this.timeLeftSave;
-		Debug.Log(t_GameStateManager.timeLeftSave + "tiempo guardado tio asdjhasdkasjdkljkldsaklj");
+		//Debug.Log(t_GameStateManager.timeLeftSave + "tiempo guardado tio asdjhasdkasjdkljkldsaklj");
 		if (hurryUp) {
 			ChangeMusic (levelMusicHurry);
 		} else {

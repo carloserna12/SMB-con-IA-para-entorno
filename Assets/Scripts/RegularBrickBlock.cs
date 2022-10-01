@@ -7,6 +7,7 @@ public class RegularBrickBlock : MonoBehaviour {
 	public GameObject TempCollider;
 	public GameObject BlockCoin;
 	private float WaitBetweenBounce = .25f;
+	public GameStateManager ArrayMov;
 
 	private LevelManager t_LevelManager;
 	private Animator m_Animator;
@@ -15,6 +16,7 @@ public class RegularBrickBlock : MonoBehaviour {
 	private float time1, time2;
 	private List<GameObject> enemiesOnTop = new List<GameObject> ();
 
+	Coordenadas coor;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +24,8 @@ public class RegularBrickBlock : MonoBehaviour {
 		m_Animator = GetComponent<Animator> ();
 		m_CoinDetector = transform.parent.Find ("Coin Detector").GetComponent<RegularBrickBlockCoinDetector> ();
 		time1 = 0;
+		ArrayMov = FindObjectOfType<GameStateManager> ();
+		
 	}
 
 
@@ -37,6 +41,11 @@ public class RegularBrickBlock : MonoBehaviour {
 			if (m_CoinDetector.coinOnTop) {
 				Instantiate (BlockCoin, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
 				Destroy (m_CoinDetector.coinOnTop);
+
+				coor = new Coordenadas("COIN",0,0);
+			
+				ArrayMov.playerLevelData.Add(coor);
+				
 			}
 
 			// Bounce or break depending on Mario's size
@@ -49,6 +58,7 @@ public class RegularBrickBlock : MonoBehaviour {
 				t_LevelManager.soundSource.PlayOneShot (t_LevelManager.breakBlockSound);
 			}
 			time1 = Time.time;
+			
 		}
 	}
 

@@ -20,9 +20,9 @@ public class Coin : MonoBehaviour {
 			t_LevelManager.AddCoin ();
 			Destroy (gameObject);
 			
-			coor = new Coordenadas("COIN",Math.Round(transform.position.x),Math.Round(transform.position.y));
+			//coor = new Coordenadas("COIN",Math.Round(transform.position.x),Math.Round(transform.position.y));
 			
-			arrayMov.playerLevelData.Add(coor);
+			//arrayMov.playerLevelData.Add(coor);
 			
 			//arrayMov.playerLevelData.Add("RCoin"+ Math.Round(transform.position.x) + "|" + Math.Round(transform.position.y));
 			/*Debug.Log("ENTRO A LA MONEDA");
