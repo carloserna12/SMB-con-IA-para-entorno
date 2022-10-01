@@ -474,6 +474,7 @@ public class Mario : MonoBehaviour {
 					other.gameObject.GetComponent<KoopaShell> ().isRolling ||  // non-rolling shell should do no damage
 					!bottomHit || (bottomHit && !enemy.isBeingStomped)) 
 				{
+					Debug.Log(other.gameObject.GetComponent<KoopaShell> ()+"  KOOOPAAAA");
 					Debug.Log (this.name + " OnCollisionEnter2D: Damaged by " + other.gameObject.name
 						+ " from " + normal.ToString () + "; isFalling=" + isFalling); // TODO sometimes fire before stompbox reacts
 					t_LevelManager.MarioPowerDown ();

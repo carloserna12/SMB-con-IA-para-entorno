@@ -251,6 +251,10 @@ public class GameStateManager : MonoBehaviour {
 		ResetSpawnPosition ();
 		sceneToLoad = null;
 		timeup = false;
+        modifMap = 0;
+        enemigosKill = 0;
+        controlVelocidad = 3;
+        playerLevelData.Clear();
 	}
 
 	public void ConfigNewLevel() {

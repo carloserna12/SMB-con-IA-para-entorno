@@ -5,7 +5,7 @@ using System;
 
 public class Goomba : Enemy {
 	private Animator m_Animator;
-	private float stompedDuration = 0.5f;
+	private float stompedDuration = 0.2f;
 
 
 
@@ -21,8 +21,6 @@ public class Goomba : Enemy {
 	}
 
 	public override void StompedByMario() {
-		
-
 		isBeingStomped = true;
 		StopInteraction ();
 		Debug.Log (this.name + " StompedByMario: stopped interaction");

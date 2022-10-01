@@ -26,6 +26,7 @@ public class LevelManager : MonoBehaviour {
 	public bool isInvinciblePowerdown;
 	public bool isInvincibleStarman;
 	private float MarioInvinciblePowerdownDuration = 2;
+	private float MarioInvinciblePowerdownDuration2 = 0.5f;
 	private float MarioInvincibleStarmanDuration = 12;
 	private float transformDuration = 0.5f;
 
@@ -264,6 +265,20 @@ public class LevelManager : MonoBehaviour {
 		mario.gameObject.layer = LayerMask.NameToLayer ("Mario");
 	}
 
+	void MarioInvinciblePowerdown2() {
+		StartCoroutine (MarioInvinciblePowerdownCo2 ());
+	}
+
+	IEnumerator MarioInvinciblePowerdownCo2() {
+		isInvinciblePowerdown = true;
+		//mario_Animator.SetBool ("isInvinciblePowerdown", true);
+		mario.gameObject.layer = LayerMask.NameToLayer ("Mario After Powerdown");
+		yield return new WaitForSeconds (MarioInvinciblePowerdownDuration2);
+		isInvinciblePowerdown = false;
+		//mario_Animator.SetBool ("isInvinciblePowerdown", false);
+		mario.gameObject.layer = LayerMask.NameToLayer ("Mario");
+	}
+
 
 	/****************** Powerup / Powerdown / Die */
 	public void MarioPowerUp() {
@@ -305,6 +320,7 @@ public class LevelManager : MonoBehaviour {
 				soundSource.PlayOneShot (pipePowerdownSound);
 			} else {
 				MarioRespawn ();
+				Debug.Log ("Mario murio");
 			}
 			Debug.Log (this.name + " MarioPowerDown: done executing");
 		} else {
@@ -363,21 +379,22 @@ public class LevelManager : MonoBehaviour {
 	/****************** Kill enemy */
 	public void MarioStompEnemy(Enemy enemy) {
 		mario_Rigidbody2D.velocity = new Vector2 (mario_Rigidbody2D.velocity.x + stompBounceVelocity.x, stompBounceVelocity.y);
-		enemy.StompedByMario ();
+		enemy.StompedByMario();
 		soundSource.PlayOneShot (stompSound);
 		AddScore (enemy.stompBonus, enemy.gameObject.transform.position);
 		Debug.Log (this.name + " MarioStompEnemy called on " + enemy.gameObject.name);
 		Coordenadas coor = new Coordenadas("enemyDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
 		t_GameStateManager.playerLevelData.Add(coor);	
-
-		Debug.Log(t_GameStateManager.modifMap + "TEQUILAAAAAAAAAAAAAA");
+		Debug.Log ("Mario stompeo un enemigo");
+		MarioInvinciblePowerdown2 ();
+		//Debug.Log(t_GameStateManager.modifMap + "TEQUILAAAAAAAAAAAAAA");
 		////
 		if (enemy.name == "Red Winged Koopa(Clone)" || enemy.name == "Red Winged Koopa" || enemy.name == "Green Koopa(Clone)")
 		{
 			coor = new Coordenadas("enemyEspecialDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
 			t_GameStateManager.playerLevelData.Add(coor);
 		}
-		Debug.Log("enemy is " + enemy.name);
+		//Debug.Log("enemy is " + enemy.name);
 
 		if (marioSize < 2 && t_GameStateManager.modifMap == 2) {
 			if (enemy.name == "Red Winged Koopa(Clone)" || enemy.name == "Red Winged Koopa" || enemy.name == "Green Koopa(Clone)" )
@@ -420,7 +437,16 @@ public class LevelManager : MonoBehaviour {
 		soundSource.PlayOneShot (kickSound);
 		AddScore (enemy.fireballBonus, enemy.gameObject.transform.position);
 		Debug.Log (this.name + " FireballTouchEnemy called on " + enemy.gameObject.name);
-		Coordenadas coor = new Coordenadas("enemyDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
+		if (enemy.gameObject.name == "Green Koopa(Clone)")
+		{
+			coor = new Coordenadas("enemyEspecialDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
+			Debug.Log (coor + "alchile" + enemy.gameObject.name);
+		}else
+		{
+			Coordenadas coor = new Coordenadas("enemyDead",Math.Round(transform.position.x),Math.Round(transform.position.y));
+			Debug.Log (coor + "alchileNo" + enemy.gameObject.name);
+		}
+		
 		t_GameStateManager.playerLevelData.Add(coor);
 	}
 

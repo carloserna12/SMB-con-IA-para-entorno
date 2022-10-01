@@ -18,6 +18,13 @@ public class LevelStartScreen : MonoBehaviour {
 	public Text CoinTextHUD;
 	public Text WorldTextMain;
 	public Text livesText;
+	public Text dificultadEnemy;
+	public Text cantidadBonificadoresTomados;
+	public Text enemigosEliminados;
+	//public Text obstaculosGenerados;
+	public Text enemigosEspecialesEliminados;
+	public Text caminoInferiorTomado;
+	public Text caminoSuperiorTomado;
 	public List<string> updateData = new List<string>();
 	public string jsonSave;
 
@@ -37,6 +44,7 @@ public class LevelStartScreen : MonoBehaviour {
 		CoinTextHUD.text = "x" + t_GameStateManager.coins.ToString ("D2");
 		WorldTextMain.text = worldName.ToUpper ();
 		livesText.text = t_GameStateManager.lives.ToString ();
+		dificultadEnemy.text = t_GameStateManager.controlVelocidad.ToString();
 
 		StartCoroutine (LoadSceneDelayCo (t_GameStateManager.sceneToLoad, loadScreenDelay));
 
@@ -115,7 +123,17 @@ public class LevelStartScreen : MonoBehaviour {
 			limpiadorPorIteracion("marioPowerUp","marioPowerUpDone");
 			limpiadorPorIteracion("enemyDead","enemyDeadDone");
 			limpiadorPorIteracion("COIN","COINDone");
+			limpiadorPorIteracion("enemyEspecialDead","enemyEspecialDeadDone");
+			limpiadorPorIteracion("caminoSuperior","caminoSuperiorDone");
+			limpiadorPorIteracion("caminoInferior","caminoInferiorDone");
 
+			//INTERFAZ GRAFICA VARIABLES//
+			cantidadBonificadoresTomados.text = (cantidadBonusRecolectados + cantidadMonedasRecolectados).ToString();
+			enemigosEliminados.text = (cantidadEnemigosMatados).ToString();
+			enemigosEspecialesEliminados.text = (cantidadEnemigosEspecialesMatados).ToString();
+			caminoInferiorTomado.text = (caminoInferiorDetectado).ToString();
+			caminoSuperiorTomado.text = (caminoSuperiorDetectado).ToString();
+			//
 			if (cantidadBonusRecolectados == cantidadBonusEnMapa || cantidadMonedasRecolectados == cantidadMonedasEnMapa)
 			{
 				Debug.Log("Entro en aleatorizar");
