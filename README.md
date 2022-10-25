@@ -1,6 +1,17 @@
-# SMB-clone
+# Anexos
+En esta seccion de anexos se adjunta todos los entregables del proyecto:
 
-Clone of Super Mario Bros, World 1-1 through 1-4. Made with Unity.
+* Documento donde se enlistan todas las posibles variables y aspectos que requeridos para el desarrollo del entorno y el PNJ en un videojuego de plataforma en dos dimensiones
+Enlace:https://docs.google.com/spreadsheets/d/1OsAuSkv9X9k-hYga0EpKYJQTVousExg_EPPizbQJiNM/edit?usp=sharing
+* Documento con la revision y la justificacion de la seleccionde las estrategias.
+Enlace:https://docs.google.com/spreadsheets/d/1OsAuSkv9X9k-hYga0EpKYJQTVousExg_EPPizbQJiNM/edit?usp=sharing
+* Resultados finales esperados en el documento.
+Enlace:https://docs.google.com/spreadsheets/d/1OsAuSkv9X9k-hYga0EpKYJQTVousExg_EPPizbQJiNM/edit?usp=sharing
+Enlace:https://docs.google.com/spreadsheets/d/1CVkTOIaw1SG6ELNCIEf_OO29uXeGNgtvXzZdG073lYw/edit?usp=sharing
+
+# SMB-clone Entorno base utilizado en el proyecto
+
+Clone of Super Mario Bros, World 1-1  Made with Unity.
 
 ***
 ### Controls
